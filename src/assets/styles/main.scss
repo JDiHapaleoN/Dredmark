@@ -1,0 +1,196 @@
+@import url(fonts.scss);
+
+// CSS Custom Properties for consistent theming
+:root {
+    --primary-dark: #002d46;
+    --primary-blue: #0057b5;
+    --primary-light: #00a8ff;
+    --accent-gradient: linear-gradient(135deg, #00a8ff 0%, #0057b5 50%, #002d46 100%);
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --shadow-soft: 0 4px 30px rgba(0, 0, 0, 0.1);
+    --shadow-glow: 0 0 30px rgba(0, 168, 255, 0.2);
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@mixin media($size) {
+    @media(max-width: #{$size}px) {
+        @content;
+    }
+}
+
+// Keyframe Animations
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    border: none;
+    outline: none;
+    font-family: 'Bahnschrift', 'Segoe UI', sans-serif;
+    font-weight: 400;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: linear-gradient(180deg, #0a1628 0%, #001a2c 100%);
+    min-height: 100vh;
+}
+
+// Utility classes for animations
+.animate-fadeIn {
+    animation: fadeInUp 0.6s var(--transition-smooth) forwards;
+}
+
+.animate-scale {
+    animation: fadeInScale 0.5s var(--transition-smooth) forwards;
+}
+
+
+
+.container {
+    max-width: 1350px;
+    width: 100%;
+    padding: 0 15px;
+    margin: 0 auto;
+
+    @include media(400) {
+        padding: none;
+    }
+}
+
+// @include media(950) {
+//     display: flex;
+//    flex-direction: column;
+//    align-items: center;
+// }
+
+
+
+.nav2 {
+    display: flex;
+    margin: 50px;
+    align-items: center;
+
+    @include media(950) {
+        margin-top: 100px;
+    }
+
+    @include media(660) {
+        margin-top: 150px;
+    }
+
+    @include media(600) {
+        margin-top: 50px;
+    }
+
+    &__a {
+        font-size: 18px;
+        font-weight: 700;
+        color: #00d4ff;
+        padding: 7px 40px;
+        border: solid 2px #00d4ff;
+        border-radius: 35px;
+        transition: all 0.3s ease;
+        background: rgba(0, 212, 255, 0.1);
+
+        &:hover {
+            background: linear-gradient(135deg, #00a8ff 0%, #0057b5 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 20px rgba(0, 168, 255, 0.4);
+        }
+
+        @include media(950) {
+            font-size: 15px;
+            padding: 5px 20px;
+            line-height: 15px;
+        }
+    }
+
+
+    &__p {
+        font-size: 18px;
+        font-weight: 400;
+
+        @include media(550) {
+            font-size: 15px;
+            line-height: 15px;
+        }
+    }
+}
+
+.seo {
+    display: none;
+}
+
+@import url(../../components/Header/Header.scss);
+@import url(../../components/VozmMain/VozmMain.scss);
+@import url(../../components/Banners/Banners.scss);
+@import url(../../components/Footer/Footer.scss);
+@import url(../../components/HomeMain/HomeMain.scss);
+@import url(../../components/UsMain/UsMain.scss);
+@import url(../../components/GaleryMain/GMain.scss);
+@import url(../../components/Modal/Modal.scss);
+@import url(../../components/Serts/Sert.scss);

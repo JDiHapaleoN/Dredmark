@@ -1,0 +1,89 @@
+@mixin media($size) {
+   @media(max-width: #{$size}px) {
+      @content;
+   }
+}
+
+.gMain2 {
+   padding: 30px;
+
+   h1 {
+      text-align: center;
+      font-weight: 700;
+      font-size: 38px;
+      padding: 20px 0;
+      color: white;
+      text-shadow: 0 2px 20px rgba(0, 168, 255, 0.3);
+   }
+
+   &__section1 {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+
+      p {
+         padding: 10px 0 20px;
+         color: rgba(255, 255, 255, 0.9);
+      }
+
+      video {
+         max-height: 600px;
+         max-width: 600px;
+         height: 100%;
+         border-radius: 12px;
+         box-shadow: 0 6px 20px rgba(0, 45, 70, 0.3);
+
+         @include media(650) {
+            max-width: 380px;
+            max-height: 450px;
+         }
+      }
+
+   }
+
+}
+
+.gMain3 {
+   padding: 30px;
+
+   .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-wrap: wrap;
+      max-width: 1000px;
+   }
+
+   &__images {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      align-items: center;
+
+   }
+
+   &__img1 {
+      height: 200px;
+      width: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 45, 70, 0.2);
+      transition: all 0.3s ease;
+
+      &:hover {
+         transform: scale(1.03);
+         box-shadow: 0 8px 25px rgba(0, 87, 181, 0.3);
+      }
+   }
+
+   &__h1 {
+      font-size: 28px;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 30px;
+      color: white;
+      text-shadow: 0 2px 20px rgba(0, 168, 255, 0.3);
+   }
+}

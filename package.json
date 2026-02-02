@@ -1,0 +1,38 @@
+{
+  "name": "luxery",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "@formspree/react": "^3.0.0",
+    "alias": "^0.0.5",
+    "framer-motion": "^12.0.6",
+    "i18next": "^24.2.2",
+    "i18next-browser-languagedetector": "^8.0.4",
+    "react": "^18.3.1",
+    "react-compare-image": "^3.5.0",
+    "react-dom": "^18.3.1",
+    "react-helmet": "^6.1.0",
+    "react-i18next": "^15.4.1",
+    "react-router-dom": "^6.26.0",
+    "sass": "^1.77.8",
+    "swiper": "^11.2.6"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.3",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "vite": "^5.3.4"
+  }
+}

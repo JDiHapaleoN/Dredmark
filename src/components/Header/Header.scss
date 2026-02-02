@@ -1,0 +1,400 @@
+@mixin media($size) {
+  @media (max-width: #{$size}px) {
+    @content;
+  }
+}
+
+.header {
+  position: fixed;
+  width: 100%;
+  z-index: 998;
+  top: 0;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(3, 1, 37, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0 20px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  @include media(1250) {
+    justify-content: center;
+    padding: 0 15px;
+  }
+
+  @include media(930) {
+    justify-content: space-between;
+    padding: 10px 15px;
+  }
+
+  &__list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    @include media(1250) {
+      justify-content: center;
+    }
+
+    @include media(930) {
+      display: flex;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      flex-direction: column;
+      justify-content: center;
+      align-items: start;
+      width: 35%;
+      height: 100vh;
+      background: rgba(0, 75, 146, 0.418);
+      backdrop-filter: blur(10px);
+      z-index: 999;
+      transform: translateX(100%);
+      transition: 0.3s linear;
+      padding: 10px;
+      padding-right: 20px;
+    }
+
+    .link {
+      font-weight: 500;
+      font-size: 16px;
+      padding: 20px 22px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.9);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: none;
+      line-height: 1.2;
+      position: relative;
+      letter-spacing: 0.3px;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 12px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #00a8ff, #0077cc);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: translateX(-50%);
+        border-radius: 2px;
+        box-shadow: 0 0 10px rgba(0, 168, 255, 0);
+      }
+
+      @include media(1250) {
+        padding: 15px 15px;
+        font-size: 15px;
+      }
+
+      @include media(670) {
+        text-align: left;
+        padding: 12px 15px;
+
+        &::after {
+          left: 15px;
+          transform: none;
+        }
+      }
+
+      &:hover {
+        color: #00d4ff;
+        text-shadow: 0 0 20px rgba(0, 168, 255, 0.5);
+
+        &::after {
+          width: 60%;
+          box-shadow: 0 0 15px rgba(0, 168, 255, 0.6);
+        }
+      }
+
+      &:focus {
+        color: #00d4ff;
+      }
+    }
+
+    .link__a {
+      font-weight: 400;
+      font-size: 18px;
+      padding: 23px 25px;
+      text-align: center;
+      color: white;
+      transition: 0.3s;
+      background: rgba(0, 30, 96, 0.632);
+
+      &:hover {
+        background: rgb(44, 0, 131);
+      }
+
+      @include media(1250) {
+        padding: 10px 10px;
+      }
+    }
+
+    .freshBtn {
+      --clr-font-main: hsla(0 0% 20% / 100);
+      --btn-bg-1: hsla(194, 100%, 50%, 1);
+      /* ярче чем 40% */
+      --btn-bg-2: hsla(217, 100%, 45%, 1);
+      /* ярче чем 35% */
+      --btn-bg-color: hsla(360, 100%, 95%, 1);
+      /* ближе к белому */
+      --radii: 0.5em;
+      cursor: pointer;
+      padding: 0.9em 1.4em;
+      font-size: var(--size, 1rem);
+      font-weight: 500;
+      transition: 0.8s;
+      background-size: 280% auto;
+      background-image: linear-gradient(325deg,
+          var(--btn-bg-2) 0%,
+          var(--btn-bg-1) 55%,
+          var(--btn-bg-2) 90%);
+      border: none;
+      border-radius: var(--radii);
+      color: var(--btn-bg-color);
+      box-shadow: 0px 0px 20px rgba(50, 150, 210, 0.4),
+        0px 5px 5px -1px rgba(40, 100, 180, 0.25),
+        inset 4px 4px 8px rgba(130, 200, 240, 0.4),
+        inset -4px -4px 8px rgba(20, 80, 190, 0.3);
+
+      @include media(430) {
+        padding: 7px;
+        width: 90px;
+      }
+    }
+
+    .freshBtn:hover {
+      background-position: right top;
+    }
+
+    .freshBtn:is(:focus, :focus-visible, :active) {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--btn-bg-color), 0 0 0 6px var(--btn-bg-2);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .freshBtn {
+        transition: linear;
+      }
+    }
+  }
+
+  .logo {
+    font-weight: 700;
+    font-size: 28px;
+    color: white;
+    padding: 15px;
+    padding-left: 45px;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 10px rgba(0, 100, 255, 0.3);
+    transition: 0.3s;
+
+    &:hover {
+      text-shadow: 0 4px 20px rgba(0, 150, 255, 0.5);
+    }
+
+    @include media(930) {
+      font-size: 24px;
+      padding: 10px;
+      padding-left: 10px;
+    }
+  }
+}
+
+.nav__list.open {
+  transform: translateX(0);
+}
+
+.select1 {
+  // display: flex;
+  appearance: none;
+  /* Убираем стандартный стиль */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  // background-repeat: no-repeat;
+  // background-position: right -8px center; /* Подвигаем стрелку ближе */
+  // background-size: 12px;
+
+  font-weight: 400;
+  font-size: 18px;
+  padding: 25px 0;
+  text-align: center;
+  color: white;
+  transition: 0.3s;
+  background: none;
+  max-width: 120px;
+  display: inline-block;
+
+  @include media(1250) {
+    padding: 15px 10px;
+    font-size: 16px;
+    text-align: left;
+  }
+
+  &:hover {
+    background: rgb(3, 3, 81);
+    color: rgb(116, 93, 246);
+  }
+
+  &:focus {
+    background: rgb(3, 3, 81);
+    color: rgb(116, 93, 246);
+  }
+}
+
+// .select2 {
+//   // display: flex;
+//   position: fixed;
+//   top: 20px;
+//   left: 20px;
+//   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+//   appearance: none;
+//   /* Убираем стандартный стиль */
+//   -webkit-appearance: none;
+//   -moz-appearance: none;
+//   // background-repeat: no-repeat;
+//   // background-position: right -8px center; /* Подвигаем стрелку ближе */
+//   // background-size: 12px;
+
+//   font-weight: 400;
+//   font-size: 18px;
+//   padding: 25px 25px;
+//   // text-align: center;
+//   color: white;
+//   transition: 0.3s;
+//   background: none;
+//   max-width: 120px;
+//   display: inline-block;
+
+//   @include media(1250) {
+//     padding: 15px 15px 15px 10px;
+//     font-size: 16px;
+//   }
+
+//   &:hover {
+//     background: rgb(3, 3, 81);
+//     color: rgb(116, 93, 246);
+//   }
+
+//   &:focus {
+//     background: rgb(3, 3, 81);
+//     color: rgb(116, 93, 246);
+//   }
+// }
+
+.lng {
+  &-wrapper {
+    position: fixed;
+    top: 12px;
+    left: 15px;
+    z-index: 1000;
+    display: inline-block;
+
+    @include media(1250) {
+      top: 15px;
+      left: 10px;
+    }
+
+    @include media(930) {
+      position: relative;
+      top: auto;
+      left: auto;
+      order: -1;
+    }
+  }
+
+  &-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px 6px 0 6px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+
+
+
+    & svg {
+      fill: rgba(255, 255, 255, 0.8);
+      transition: all 0.25s ease;
+
+      &:hover {
+        fill: white;
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  &-list {
+    position: absolute;
+    top: 110%;
+    /* появляется чуть ниже иконки */
+    left: 0;
+    background: rgba(0, 0, 0, 0.85);
+    border-radius: 8px;
+    padding: 6px 0;
+    min-width: 70px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-5px);
+    transition: all 0.25s ease;
+
+    &.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+  }
+
+  &-item {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 14px;
+    padding: 6px 12px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+}
+
+.option1 {
+  font-size: 15px;
+}
+
+.burger {
+  display: none;
+  cursor: pointer;
+  font-size: 24px;
+  position: relative;
+  z-index: 1000;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  img {
+    width: 28px;
+    height: 28px;
+  }
+
+  @include media(930) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
