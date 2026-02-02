@@ -602,7 +602,7 @@
 }
 
 .vozmSection {
-  border-top: solid 1px gray;
+  border-top: solid 1px rgba(255, 255, 255, 0.1);
 }
 
 .vozmMain__section8 {
@@ -866,12 +866,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f4f7fa;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   width: max-content;
-  margin: 0 auto;
+  margin: 40px auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 
   @include media(420) {
     max-width: 370px;
