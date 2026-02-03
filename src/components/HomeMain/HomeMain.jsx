@@ -106,13 +106,12 @@ const HomeMain = () => {
     };
 
     try {
-      const response = await fetch("https://formspree.io/f/mvganqgv", {
+      const response = await fetch("http://localhost:5001/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
         },
-        body: JSON.stringify(dataToSend),
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
