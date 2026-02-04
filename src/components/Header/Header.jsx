@@ -14,9 +14,9 @@ const Header = () => {
   const [selectedLang, setSelectedLang] = useState(i18n.language);
   const [openLng, setOpenLng] = useState(false)
 
-  useEffect(() => { 
-    setSelectedLang(i18n.language); 
-  }, [i18n.language]); 
+  useEffect(() => {
+    setSelectedLang(i18n.language);
+  }, [i18n.language]);
 
   // Управление навигацией через select
   const [selectedPage, setSelectedPage] = useState("");
@@ -42,7 +42,7 @@ const Header = () => {
   };
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null)
-  
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -59,32 +59,29 @@ const Header = () => {
     };
   }, [isOpen]);
 
-  
+
 
   return (
     <header className="header">
       <nav className="nav">
-        
-         <div className="lng-wrapper">
+
+        <div className="lng-wrapper">
           <button type='submit' onClick={() => setOpenLng(!openLng)} className="lng-button"><img src={language} alt="" /></button>
-          {openLng ? 
-          <ul className={`lng-list ${openLng ? 'open' : ''}`}>
-            <li><button className="lng-item" onClick={() => handleLanguageChange('ru')}>Ru</button></li>
-            <li><button className="lng-item" onClick={() => handleLanguageChange('en')}>En</button></li>
-            <li><button className="lng-item" onClick={() => handleLanguageChange('uz')}>Uz</button></li>
-          </ul> : ''}
-          </div>
+          {openLng ?
+            <ul className={`lng-list ${openLng ? 'open' : ''}`}>
+              <li><button className="lng-item" onClick={() => handleLanguageChange('ru')}>Ru</button></li>
+              <li><button className="lng-item" onClick={() => handleLanguageChange('en')}>En</button></li>
+              <li><button className="lng-item" onClick={() => handleLanguageChange('uz')}>Uz</button></li>
+            </ul> : ''}
+        </div>
         <NavLink to='/' className='logo'>DREDMARK</NavLink>
-        <div className="burger" onClick={() => {
-          if (!isOpen) {
-            setIsOpen(true)
-          }
+        <div className={`burger ${isOpen ? "open" : ""}`} onClick={() => {
+          setIsOpen(!isOpen)
         }}>
           <img src={burger} alt="" />
         </div>
 
         <ul ref={menuRef} className={`nav__list ${isOpen ? "open" : ""}`}>
-        <a href="#footer"><img src={email} alt="" /></a>
           <NavLink to='/' className='link'>{t('navLink1')}</NavLink>
           <NavLink to='/vozm' className='link'>{t('navLink2')}</NavLink>
           <select onChange={handlePageChange} value={selectedPage} className="select1">
@@ -102,8 +99,8 @@ const Header = () => {
             <option value="ru">Ru</option>
             <option value="en">En</option>
             <option value="uz">Uz</option>
-          </select> */} 
-         
+          </select> */}
+
 
           <NavLink to="#footer" className='link__a'>{t("navLink7")}</NavLink>
 
@@ -114,4 +111,3 @@ const Header = () => {
 };
 
 export default Header;
- 

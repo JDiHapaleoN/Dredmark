@@ -298,20 +298,81 @@
     }
   }
 
+  &__contacts {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 5px;
+
+    @include media(768) {
+      justify-content: center;
+    }
+
+    @include media(480) {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 10px;
+    }
+  }
+
   &__phone {
     color: white;
     font-size: 16px;
     font-weight: 400;
   }
+}
 
-  span {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+.footer__icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 
-    @include media(768) {
-      justify-content: center;
+  img {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    img {
+      transform: scale(1.1);
     }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.footer__partners-contacts {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 5px;
+
+  @include media(768) {
+    justify-content: center;
+  }
+}
+
+.ft4__phone-link,
+.footer__partners-phone-link {
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.8;
   }
 }
 

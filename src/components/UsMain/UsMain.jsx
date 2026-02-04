@@ -24,6 +24,8 @@ import fabricImg6 from '../../assets/images/fabricImg6.jpg'
 import fabricImg7 from '../../assets/images/fabricImg7.jpg'
 
 import { useTranslation } from "react-i18next"
+import ContactForm from "../ContactForm/ContactForm"
+import RevealSection from "../Common/RevealSection"
 const UsMain = () => {
   const { t } = useTranslation()
   return (
@@ -33,16 +35,18 @@ const UsMain = () => {
         <p className='nav2__p'>{t('usMainNav2Text2')}</p>
       </div>
       <div className="container">
-        <h1 className="usMain__h1">{t('usMainH1')}</h1>
-        <div className="usMain__text">
-          <p className="usMain__p1">
-            {t('usMainSection1P1')}
-          </p>
-          <p className="usMain__p2">
-            {t('usMainSection1P2')}
-          </p>
-        </div>
-        <div className="usMain__fabric">
+        <RevealSection>
+          <h1 className="usMain__h1">{t('usMainH1')}</h1>
+          <div className="usMain__text">
+            <p className="usMain__p1">
+              {t('usMainSection1P1')}
+            </p>
+            <p className="usMain__p2">
+              {t('usMainSection1P2')}
+            </p>
+          </div>
+        </RevealSection>
+        <RevealSection className="usMain__fabric">
           <h2 className="usMain__fabric-title">{t('usMainFabricP1')}</h2>
           <div className="usMain__fabric-images">
             <img src={fabricImg1} alt="" />
@@ -53,10 +57,10 @@ const UsMain = () => {
             <img src={fabricImg6} alt="" />
             <img src={fabricImg7} alt="" />
           </div>
-        </div>
+        </RevealSection>
         <div className="usMain__block">
 
-          <div className="usMain__block-section1">
+          <RevealSection className="usMain__block-section1">
             <h2 className="usMain__h2">{t('usMainSection2H2')}</h2>
             <div className="usMain__block-section1-images">
               <img src={section1Img2} alt="" className="usMain__block-section1-images-img" />
@@ -68,7 +72,7 @@ const UsMain = () => {
               <video src={video19} controls></video>
             </div>
             <p>{t('usMainSection2P')}</p>
-          </div>
+          </RevealSection>
           <div className="usMain__block-section2">
             <h2 className="usMain__h2">{t('usMainSection3H2')}</h2>
             <div className="div">
@@ -94,218 +98,232 @@ const UsMain = () => {
             <h2 className="usMain__h2">{t('usMainSection7H2')}</h2>
             <div className="usMain__block-section7-russia">
               <img src={mapRussia} alt="" />
-              <table className="russia-table">
-                <thead>
-                  <tr>
-                    <th>{t('usMainSection7Title1')}</th>
-                    <th>{t('usMainSection7Title2')}</th>
-                    <th>{t('usMainSection7Title3')}</th>
-                    <th>{t('usMainSection7Title4')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{t('usMainSection7Russia')}</td>
-                    <td className="">{t('usMainSection7RussiaCity1')}</td>
-                    <td>2000/63 {t('usMainSection7P1')}</td>
-                    <td className="">6</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7RussiaCity2')}</td>
-                    <td>{t('usMainSection7P2')}</td>
-                    <td className="">5</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7RussiaCity3')}</td>
-                    <td>1800/31 {t('usMainSection7P3')}</td>
-                    <td className="">4</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7RussiaCity4')}</td>
-                    <td>3000/71 {t('usMainSection7P1')}</td>
-                    <td className="">3</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7RussiaCity5')}</td>
-                    <td>1800/31 {t('usMainSection7P3')}</td>
-                    <td className="">7</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7RussiaCity6')}</td>
-                    <td>1800/31 {t('usMainSection7P1')}</td>
-                    <td className="">4</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7RussiaCity7')}</td>
-                    <td>1800/31 {t('usMainSection7P1')}</td>
-                    <td className="">3</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7RussiaCity8')}</td>
-                    <td>1600/25 {t('usMainSection7P1')}</td>
-                    <td className="">6</td>
-                  </tr>
-
-                </tbody>
-              </table>
+              <div className="table-wrapper">
+                <table className="russia-table">
+                  <thead>
+                    <tr>
+                      <th>{t('usMainSection7Title1')}</th>
+                      <th>{t('usMainSection7Title2')}</th>
+                      <th>{t('usMainSection7Title3')}</th>
+                      <th>{t('usMainSection7Title4')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{t('usMainSection7Russia')}</td>
+                      <td className="">{t('usMainSection7RussiaCity1')}</td>
+                      <td>2000/63 {t('usMainSection7P1')}</td>
+                      <td className="">6</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7RussiaCity2')}</td>
+                      <td>{t('usMainSection7P2')}</td>
+                      <td className="">5</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7RussiaCity3')}</td>
+                      <td>1800/31 {t('usMainSection7P3')}</td>
+                      <td className="">4</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7RussiaCity4')}</td>
+                      <td>3000/71 {t('usMainSection7P1')}</td>
+                      <td className="">3</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7RussiaCity5')}</td>
+                      <td>1800/31 {t('usMainSection7P3')}</td>
+                      <td className="">7</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7RussiaCity6')}</td>
+                      <td>1800/31 {t('usMainSection7P1')}</td>
+                      <td className="">4</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7RussiaCity7')}</td>
+                      <td>1800/31 {t('usMainSection7P1')}</td>
+                      <td className="">3</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7RussiaCity8')}</td>
+                      <td>1600/25 {t('usMainSection7P1')}</td>
+                      <td className="">6</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div className="usMain__block-section7-russia">
-              <table className="russia-table">
-                <thead>
-                  <tr>
-                    <th>{t('usMainSection7Title1')}</th>
-                    <th>{t('usMainSection7Title2')}</th>
-                    <th>{t('usMainSection7Title3')}</th>
-                    <th>{t('usMainSection7Title4')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{t('usMainSection7Uz')}</td>
-                    <td className="">{t('usMainSection7UzCity1')}</td>
-                    <td>1800/31 {t('usMainSection7P1')}</td>
-                    <td className="">28</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7UzCity2')}</td>
-                    <td>2000/63 {t('usMainSection7P4')}</td>
-                    <td className="">10</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7UzCity3')}</td>
-                    <td>{t('usMainSection7P5')}</td>
-                    <td className="">9</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7UzCity4')}</td>
-                    <td>400/20 {t('usMainSection7P1')}</td>
-                    <td className="">5</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7UzCity5')}</td>
-                    <td>400/20 {t('usMainSection7P1')}</td>
-                    <td className="">7</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7UzCity6')}</td>
-                    <td>400/20 {t('usMainSection7P1')}</td>
-                    <td className="">6</td>
-                  </tr>
-
-                </tbody>
-              </table>
+              <div className="table-wrapper">
+                <table className="russia-table">
+                  <thead>
+                    <tr>
+                      <th>{t('usMainSection7Title1')}</th>
+                      <th>{t('usMainSection7Title2')}</th>
+                      <th>{t('usMainSection7Title3')}</th>
+                      <th>{t('usMainSection7Title4')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{t('usMainSection7Uz')}</td>
+                      <td className="">{t('usMainSection7UzCity1')}</td>
+                      <td>1800/31 {t('usMainSection7P1')}</td>
+                      <td className="">28</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7UzCity2')}</td>
+                      <td>2000/63 {t('usMainSection7P4')}</td>
+                      <td className="">10</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7UzCity3')}</td>
+                      <td>{t('usMainSection7P5')}</td>
+                      <td className="">9</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7UzCity4')}</td>
+                      <td>400/20 {t('usMainSection7P1')}</td>
+                      <td className="">5</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7UzCity5')}</td>
+                      <td>400/20 {t('usMainSection7P1')}</td>
+                      <td className="">7</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7UzCity6')}</td>
+                      <td>400/20 {t('usMainSection7P1')}</td>
+                      <td className="">6</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
               <img src={mapUz} alt="" />
             </div>
             <div className="usMain__block-section7-russia">
               <img src={mapKz} alt="" />
-              <table className="russia-table">
-                <thead>
-                  <tr>
-                    <th>{t('usMainSection7Title1')}</th>
-                    <th>{t('usMainSection7Title2')}</th>
-                    <th>{t('usMainSection7Title3')}</th>
-                    <th>{t('usMainSection7Title4')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{t('usMainSection7Kz')}</td>
-                    <td className="">{t('usMainSection7KzCity1')}</td>
-                    <td>1600/25 {t('usMainSection7P1')}</td>
-                    <td className="">5</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7KzCity2')}</td>
-                    <td>{t('usMainSection7P6')} 1800/31</td>
-                    <td className="">6</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td className="">{t('usMainSection7KzCity3')}</td>
-                    <td>1800/31 {t('usMainSection7P1')}</td>
-                    <td className="">3</td>
-                  </tr>
-
-                </tbody>
-              </table>
+              <div className="table-wrapper">
+                <table className="russia-table">
+                  <thead>
+                    <tr>
+                      <th>{t('usMainSection7Title1')}</th>
+                      <th>{t('usMainSection7Title2')}</th>
+                      <th>{t('usMainSection7Title3')}</th>
+                      <th>{t('usMainSection7Title4')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{t('usMainSection7Kz')}</td>
+                      <td className="">{t('usMainSection7KzCity1')}</td>
+                      <td>1600/25 {t('usMainSection7P1')}</td>
+                      <td className="">5</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7KzCity2')}</td>
+                      <td>{t('usMainSection7P6')} 1800/31</td>
+                      <td className="">6</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td className="">{t('usMainSection7KzCity3')}</td>
+                      <td>1800/31 {t('usMainSection7P1')}</td>
+                      <td className="">3</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div className="usMain__block-section7-russia">
-              <table className="russia-table">
-                <thead>
-                  <tr>
-                    <th>{t('usMainSection7Title1')}</th>
-                    <th>{t('usMainSection7Title2')}</th>
-                    <th>{t('usMainSection7Title3')}</th>
-                    <th>{t('usMainSection7Title4')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{t('usMainSection7Tj')}</td>
-                    <td className="">{t('usMainSection7TjCity')}</td>
-                    <td>1800/31 {t('usMainSection7P1')}</td>
-                    <td className="">3</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div className="table-wrapper">
+                <table className="russia-table">
+                  <thead>
+                    <tr>
+                      <th>{t('usMainSection7Title1')}</th>
+                      <th>{t('usMainSection7Title2')}</th>
+                      <th>{t('usMainSection7Title3')}</th>
+                      <th>{t('usMainSection7Title4')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{t('usMainSection7Tj')}</td>
+                      <td className="">{t('usMainSection7TjCity')}</td>
+                      <td>1800/31 {t('usMainSection7P1')}</td>
+                      <td className="">3</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
               <img src={mapTj} alt="" />
             </div>
             <div className="usMain__block-section7-russia">
               <img src={mapKrg} alt="" />
-              <table className="russia-table">
-                <thead>
-                  <tr>
-                    <th>{t('usMainSection7Title1')}</th>
-                    <th>{t('usMainSection7Title2')}</th>
-                    <th>{t('usMainSection7Title3')}</th>
-                    <th>{t('usMainSection7Title4')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{t('usMainSection7Krg')}</td>
-                    <td className="">{t('usMainSection7KrgCity')}</td>
-                    <td>800/40 {t('usMainSection7P3')}</td>
-                    <td className="">5</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div className="table-wrapper">
+                <table className="russia-table">
+                  <thead>
+                    <tr>
+                      <th>{t('usMainSection7Title1')}</th>
+                      <th>{t('usMainSection7Title2')}</th>
+                      <th>{t('usMainSection7Title3')}</th>
+                      <th>{t('usMainSection7Title4')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{t('usMainSection7Krg')}</td>
+                      <td className="">{t('usMainSection7KrgCity')}</td>
+                      <td>800/40 {t('usMainSection7P3')}</td>
+                      <td className="">5</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
           <div id='fresh-projects' className="freshBlock">
             <h2 className="usMain__h2">{t('usMainFreshH2')}</h2>
             <div className="freshBlock__info">
-              <table className="freshBlock__info-table">
-                <tr>
-                  <th><h3 className="freshBlock__info-title">{t('usMainFreshP1')}</h3></th>
-                  <th><h3 className="freshBlock__info-title">{t('usMainFreshP2')}</h3></th>
-                  <td rowSpan="2"> <Link to="/img#gMainBox6" className="freshBlock__btn">{t('usMainFreshP3')} »</Link></td>
-                </tr>
-                <tr>
-                  <td>{t('usMainFreshP4')}</td> 
-                  <td>{t('usMainFreshP5')}</td>
-                </tr>
-                <tr> 
-                  <td>4000/65</td>
-                  <td>{t('usMainFreshP6')}</td>  
-                  <td><Link to="/img#gMainBox7" className="freshBlock__btn">{t('usMainFreshP3')} »</Link></td>
-                </tr>
-              </table>
+              <div className="table-wrapper">
+                <table className="freshBlock__info-table">
+                  <thead>
+                    <tr>
+                      <th><h3 className="freshBlock__info-title">{t('usMainFreshP1')}</h3></th>
+                      <th><h3 className="freshBlock__info-title">{t('usMainFreshP2')}</h3></th>
+                      <th>{t('usMainFreshP3')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{t('usMainFreshP4')}</td>
+                      <td>{t('usMainFreshP5')}</td>
+                      <td> <Link to="/img#gMainBox6" className="freshBlock__btn">{t('usMainFreshP3')} »</Link></td>
+                    </tr>
+                    <tr>
+                      <td>4000/65</td>
+                      <td>{t('usMainFreshP6')}</td>
+                      <td><Link to="/img#gMainBox7" className="freshBlock__btn">{t('usMainFreshP3')} »</Link></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-           
+
           </div>
           <div className="about-seo-info">
             <h3>{t('seoText6')}</h3>
@@ -313,9 +331,8 @@ const UsMain = () => {
               {t('seoText7')}
             </p>
           </div>
-
+          <ContactForm />
         </div>
-
       </div>
     </div>
   )

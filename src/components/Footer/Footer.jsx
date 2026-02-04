@@ -18,19 +18,31 @@ const Footer = () => {
             <div className="footer__infomain-box1">
               <div className="ft4">
                 <h4 className="ft4__p1">{t("fP4")}</h4>
-                <span>
-                  <img src={whatsapp} alt="" />
-                  <img src={telegram} alt="" />
-                  <span className="ft4__phone">+998 97 407-57-93</span>
-                </span>
+                <div className="ft4__contacts">
+                  <a href="https://wa.me/998974075793" target="_blank" rel="noopener noreferrer" className="footer__icon-link">
+                    <img src={whatsapp} alt="WhatsApp" />
+                  </a>
+                  <a href="https://t.me/+998974075793" target="_blank" rel="noopener noreferrer" className="footer__icon-link">
+                    <img src={telegram} alt="Telegram" />
+                  </a>
+                  <a href="tel:+998974075793" className="ft4__phone-link">
+                    <span className="ft4__phone">+998 97 407-57-93</span>
+                  </a>
+                </div>
               </div>
               <div className="ft4">
                 <h4 className="ft4__p1">{t("fP5")}</h4>
-                <span>
-                  <img src={whatsapp} alt="" />
-                  <img src={telegram} alt="" />
-                  <span className="ft4__phone">+998 90 113-85-44</span>
-                </span>
+                <div className="ft4__contacts">
+                  <a href="https://wa.me/998901138544" target="_blank" rel="noopener noreferrer" className="footer__icon-link">
+                    <img src={whatsapp} alt="WhatsApp" />
+                  </a>
+                  <a href="https://t.me/+998901138544" target="_blank" rel="noopener noreferrer" className="footer__icon-link">
+                    <img src={telegram} alt="Telegram" />
+                  </a>
+                  <a href="tel:+998901138544" className="ft4__phone-link">
+                    <span className="ft4__phone">+998 90 113-85-44</span>
+                  </a>
+                </div>
               </div>
             </div>
             {/* <div className="footer__infomain-box2">
@@ -63,7 +75,7 @@ const Footer = () => {
               </a>
             </div> */}
           </div>
-          <a href="#" className="linkInst">
+          <a href="mailto:dredmark.websites@gmail.com" className="linkInst">
             {/* <img src={email} alt="" /> */}
             dredmark.websites@gmail.com
           </a>
@@ -81,19 +93,31 @@ const Footer = () => {
           <h3 className="footer__partners-title">{t("fP1")}</h3>
           <div className="footer__partners-item">
             <h4 className="footer__partners-subtitle">{t("fP9")}</h4>
-            <span>
-              <img src={whatsapp} alt="" />
-              <img src={telegram} alt="" />
-              <span className="footer__partners-phone">+7 910 663-07-33</span>
-            </span>
+            <div className="footer__partners-contacts">
+              <a href="https://wa.me/79106630733" target="_blank" rel="noopener noreferrer" className="footer__icon-link">
+                <img src={whatsapp} alt="WhatsApp" />
+              </a>
+              <a href="https://t.me/+79106630733" target="_blank" rel="noopener noreferrer" className="footer__icon-link">
+                <img src={telegram} alt="Telegram" />
+              </a>
+              <a href="tel:+79106630733" className="footer__partners-phone-link">
+                <span className="footer__partners-phone">+7 910 663-07-33</span>
+              </a>
+            </div>
           </div>
           <div className="footer__partners-item">
             <h4 className="footer__partners-subtitle">{t("fP8")}</h4>
-            <span>
-              <img src={whatsapp} alt="" />
-              <img src={telegram} alt="" />
-              <span className="footer__partners-phone">+7 909 718-33-47</span>
-            </span>
+            <div className="footer__partners-contacts">
+              <a href="https://wa.me/79097183347" target="_blank" rel="noopener noreferrer" className="footer__icon-link">
+                <img src={whatsapp} alt="WhatsApp" />
+              </a>
+              <a href="https://t.me/+79097183347" target="_blank" rel="noopener noreferrer" className="footer__icon-link">
+                <img src={telegram} alt="Telegram" />
+              </a>
+              <a href="tel:+79097183347" className="footer__partners-phone-link">
+                <span className="footer__partners-phone">+7 909 718-33-47</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

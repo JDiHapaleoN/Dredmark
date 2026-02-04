@@ -12,19 +12,26 @@ import video13 from '../../assets/video/video13.mp4'
 import video14 from '../../assets/video/video14.mp4'
 import video15 from '../../assets/video/video15.mp4'
 import { useTranslation } from "react-i18next";
+import ContactForm from "../ContactForm/ContactForm";
+import SEO from "../Common/SEO";
 const GMain2 = () => {
   const { t } = useTranslation();
- 
+
   return (
     <>
-     
-      <div className="gMain2"> 
+      <SEO
+        title={t("seoTitleGallery")}
+        description={t("seoDescGallery")}
+        url="/video"
+      />
+
+      <div className="gMain2">
         <div className="container">
-        <div className="nav2">
-        <Link to="/" className='nav2__a'>Главная</Link>
-        <p className='nav2__p'>» ВИДЕО</p>
-      </div>
-      <h1>{t('videoMain')}</h1>
+          <div className="nav2">
+            <Link to="/" className='nav2__a'>Главная</Link>
+            <p className='nav2__p'>» ВИДЕО</p>
+          </div>
+          <h1>{t('videoMain')}</h1>
           <div className="gMain2__section1">
             <video src={video1} controls></video>
             <video src={video2} controls></video>
@@ -39,9 +46,10 @@ const GMain2 = () => {
             <video src={video12} controls></video>
             <video src={video4} controls></video>
             <video src={video5} controls></video>
-        
+
           </div>
         </div>
+        <ContactForm />
       </div>
     </>
   )

@@ -71,6 +71,8 @@ import block7Img7 from '../../assets/images/gM3Block7Img7.jpg'
 
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import ContactForm from "../ContactForm/ContactForm"
+import SEO from "../Common/SEO"
 const imagesGm3Block1 = [
   cardImg1,
   cardImg3,
@@ -170,6 +172,11 @@ const GMain3 = () => {
   };
   return (
     <div className="gMain3">
+      <SEO
+        title={t("seoTitleGallery")}
+        description={t("seoDescGallery")}
+        url="/img"
+      />
       {isModalImg1Open && (
         <ModalImg1
           closeModalImg1={closeModalImg1Handler}
@@ -218,7 +225,7 @@ const GMain3 = () => {
 
           {imagesGm3Block4.map((img, index) => (
             <button key={index} onClick={() => openModalImg1Handler(index, imagesGm3Block4)}>
-              <img src={img} alt={`Image ${index + 1}`} className="gMain3__img1"/>
+              <img src={img} alt={`Image ${index + 1}`} className="gMain3__img1" />
             </button>
           ))}
         </div>
@@ -249,6 +256,7 @@ const GMain3 = () => {
           <Link to='/us#fresh-projects' className="nav2__a">« {t('gM3FreshH2')}</Link>
         </div>
       </div>
+      <ContactForm />
     </div>
   )
 }

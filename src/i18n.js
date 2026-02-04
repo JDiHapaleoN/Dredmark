@@ -1,5 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
 
 const resources = {
   ru: {
@@ -12,6 +13,7 @@ const resources = {
       navLink8: "Наверх",
       navLink9: "Назад",
       navLin10: "Связаться",
+      whatsappMsg: "Здравствуйте! Хочу проконсультироваться по поводу земснаряда DREDMARK.",
       gallery: "Галерея ▾",
       video: "Видео",
       images: "Изображения",
@@ -320,6 +322,30 @@ const resources = {
       seoText6: "Оборудование DREDMARK подходит для:",
       seoText7:
         "Углубление рек, очистки озёр, добычи песка, углубления каналов, технических работ на водоёмах. Мы производим земснаряды с гидравлическим приводом, мини-модели, земснаряды-амфибии и установки на шасси. Доступна доставка по Узбекистану, Казахстану, России, Таджикистану, и Кыргызстану.",
+      toastSuccess: "Сообщение успешно отправлено!",
+      toastError: "Ошибка при отправке. Попробуйте позже.",
+      toastNetError: "Ошибка сети. Проверьте подключение.",
+      unitM: "м",
+      unitH: "час",
+      unitMonth: "мес",
+      seoBuy: "земснаряд купить",
+      seoProducer: "производитель земснарядов",
+      seoPrice: "земснаряд цена",
+      seoTitleHome: "Купить земснаряд от производителя DREDMARK | Цены и характеристики",
+      seoDescHome: "Продажа земснарядов DREDMARK для дноуглубления, очистки водоемов и добычи песка. ✅ Собственное производство ✅ Гарантия ✅ Доставка в СНГ.",
+      seoKeywordsHome: "земснаряд, купить земснаряд, производство земснарядов, дноуглубление, DREDMARK, очистка водоемов, добыча песка",
+      seoTitleUs: "О компании DREDMARK | Производство земснарядов в Узбекистане",
+      seoDescUs: "Узнайте больше о компании DREDMARK. Мы производим современные земснаряды и насосные станции с 20-летним опытом работы.",
+      seoTitleVozm: "Каталог земснарядов DREDMARK | Технические характеристики",
+      seoDescVozm: "Полный перечень продукции DREDMARK: многофункциональные земснаряды-амфибии, насосные станции и запчасти.",
+      seoTitleSert: "Сертификаты и патенты DREDMARK | Качество и надежность",
+      seoDescSert: "Официальные сертификаты качества и патенты на производство земснарядов DREDMARK. Гарантия соответствия стандартам.",
+      seoTitleGallery: "Фото и видео земснарядов DREDMARK в работе",
+      seoDescGallery: "Галерея реализованных проектов DREDMARK. Посмотрите наши земснаряды в деле: видео и фото с объектов.",
+      pageNotFound: "Страница не найдена",
+      pageNotFoundSub: "Кажется, вы заплыли слишком далеко или такой страницы не существует.",
+      goHome: "Вернуться на главную",
+      loading: "Отправка...",
     },
   },
   en: {
@@ -332,6 +358,7 @@ const resources = {
       navLink8: "Top",
       navLink9: "Back",
       navLin10: "Get in touch",
+      whatsappMsg: "Hello! I'm interested in a DREDMARK dredger. Could you please provide more information?",
       gallery: "Gallery ▾",
       brochure: "Brochures",
       video: "Video",
@@ -645,6 +672,30 @@ const resources = {
       seoText6: "DREDMARK equipment is suitable for:",
       seoText7:
         "River deepening, lake cleaning, sand extraction, channel deepening, and technical operations on water bodies. We manufacture hydraulic dredgers, mini dredgers, amphibious dredgers, and chassis-mounted units. Delivery available to Uzbekistan, Kazakhstan, Russia, Tajikistan, and Kyrgyzstan.",
+      toastSuccess: "Message sent successfully!",
+      toastError: "Sending error. Please try again later.",
+      toastNetError: "Network error. Check your connection.",
+      unitM: "m",
+      unitH: "h",
+      unitMonth: "mo",
+      seoBuy: "buy dredger",
+      seoProducer: "dredger manufacturer",
+      seoPrice: "dredger price",
+      seoTitleHome: "Buy Dredger from Manufacturer DREDMARK | Best Prices & Specs",
+      seoDescHome: "DREDMARK dredgers for dredging, pond cleaning, and sand extraction. ✅ Own Production ✅ Warranty ✅ Delivery to CIS and UAE.",
+      seoKeywordsHome: "dredger, buy dredger, dredger manufacturer, dredging, DREDMARK, pond cleaning, sand extraction",
+      seoTitleUs: "About DREDMARK | Dredger Production in Uzbekistan",
+      seoDescUs: "Learn more about DREDMARK. We manufacture modern dredgers and pump stations with over 20 years of experience.",
+      seoTitleVozm: "DREDMARK Dredger Catalog | Technical Specifications",
+      seoDescVozm: "Complete list of DREDMARK products: multifunctional amphibious dredgers, pump stations, and spare parts.",
+      seoTitleSert: "DREDMARK Certificates & Patents | Quality and Reliability",
+      seoDescSert: "Official quality certificates and patents for DREDMARK dredger production. Guaranteed compliance with international standards.",
+      seoTitleGallery: "DREDMARK Dredgers in Action | Photo & Video Gallery",
+      seoDescGallery: "Gallery of completed DREDMARK projects. See our dredgers in action: videos and photos from sites.",
+      pageNotFound: "Page Not Found",
+      pageNotFoundSub: "It looks like you've drifted too far, or this page doesn't exist.",
+      goHome: "Go back to Home",
+      loading: "Sending...",
     },
   },
 
@@ -658,6 +709,7 @@ const resources = {
       navLink8: "Tepaga",
       navLink9: "Orqaga",
       navLin10: "bog'laning",
+      whatsappMsg: "Assalomu alaykum! DREDMARK zemsnaryadlari haqida ma'lumot olmoqchi edim.",
       gallery: "Galereya ▾",
       brochure: "Broshyuralar",
       video: "Video",
@@ -979,22 +1031,52 @@ const resources = {
       seoText6: "DREDMARK uskunalari quyidagilar uchun mos:",
       seoText7:
         "Daryo chuqurlashtirish, ko‘llarni tozalash, qum qazib olish, kanallarni kengaytirish va suv havzalarida texnik ishlar uchun. Biz gidravlik zemsyornyadlar, mini modellari, amfibiyali va shassiga o‘rnatiladigan uskunalarni ishlab chiqaramiz. Yetkazib berish O‘zbekiston, Qozog‘iston, Rossiya, Tojikiston va Qirg‘izistonga mavjud.",
+      toastSuccess: "Xabar muvaffaqiyatli yuborildi!",
+      toastError: "Yuborishda xatolik yuz berdi. Keyinroq qayta urinib ko'ring.",
+      toastNetError: "Tarmoq xatosi. Ulanishni tekshiring.",
+      unitM: "m",
+      unitH: "soat",
+      unitMonth: "oy",
+      seoBuy: "zemsnaryad sotib olish",
+      seoProducer: "zemsnaryad ishlab chiqaruvchi",
+      seoPrice: "zemsnaryad narxi",
+      seoTitleHome: "DREDMARK Zemsnaryadlari | Sotib olish, Narxlar va Xarakteristikalar",
+      seoDescHome: "DREDMARK zemsnaryadlarini sotish: daryolarni chuqurlashtirish va qum qazib olish uchun. ✅ O'z ishlab chiqarishimiz ✅ Kafolat ✅ Yetkazib berish.",
+      seoKeywordsHome: "zemsnaryad, zemsnaryad sotib olish, zemsnaryad ishlab chiqarish, DREDMARK, daryo tozalash, qum qazib olish",
+      seoTitleUs: "DREDMARK kompaniyasi haqida | O'zbekistonda zemsnaryad ishlab chiqarish",
+      seoDescUs: "DREDMARK haqida ko'proq bilib oling. Biz 20 yillik tajribaga ega zamonaviy zemsnaryadlar va nasos stansiyalarini ishlab chiqaramiz.",
+      seoTitleVozm: "DREDMARK mahsulotlar katalogi | Texnik xususiyatlar",
+      seoDescVozm: "DREDMARK mahsulotlarining to'liq ro'yxati: ko'p funktsiyali amfibiya zemsnaryadlari, nasos stansiyalari va ehtiyot qismlar.",
+      seoTitleSert: "DREDMARK sertifikatlari va patentlari | Sifat va ishonch",
+      seoDescSert: "DREDMARK zemsnaryadlarini ishlab chiqarish uchun rasmiy sifat sertifikatlari va patentlar. Standartlarga muvofiqlik kafolati.",
+      seoTitleGallery: "DREDMARK zemsnaryadlari ish jarayonida | Foto va Video galereya",
+      seoDescGallery: "Amalga oshirilgan DREDMARK loyihalari galereyasi. Bizning zemsnaryadlarimizni amalda ko'ring: ob'ektlardan video va fotolar.",
+      pageNotFound: "Sahifa topilmadi",
+      pageNotFoundSub: "Siz juda uzoqqa suzib ketdingiz yoki bunday sahifa mavjud emas.",
+      goHome: "Bosh sahifaga qaytish",
+      loading: "Yuborilmoqda...",
     },
   },
 };
 
-i18n.use(initReactI18next).init({
-  resources,
-  lng: localStorage.getItem("language") || "ru",
-  // fallbackLng: "ru",
-  interpolation: {
-    escapeValue: false,
-  },
-});
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources,
+    fallbackLng: "ru",
+    detection: {
+      order: ["localStorage", "navigator"],
+      caches: ["localStorage"],
+    },
+    interpolation: {
+      escapeValue: false,
+    },
+  });
 
 export const changeLanguage = (lng) => {
   i18n.changeLanguage(lng);
   localStorage.setItem("language", lng);
 };
- 
+
 export default i18n;

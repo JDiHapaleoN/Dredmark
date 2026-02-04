@@ -439,8 +439,9 @@
                 .russia-table {
                     border-collapse: separate;
                     border-spacing: 0;
-                    width: max-content;
-                    margin: 20px;
+                    width: 100%;
+                    min-width: 600px;
+                    margin: 0;
                     font-size: 16px;
                     border-radius: 12px;
                     overflow: hidden;
@@ -581,11 +582,16 @@
         text-shadow: 0 2px 20px rgba(0, 168, 255, 0.3);
         font-size: 28px;
         font-weight: 700;
+
+        @include media(550) {
+            font-size: 22px;
+        }
     }
 
     &__info {
         &-table {
             width: 100%;
+            min-width: 600px;
             border-collapse: separate;
             border-spacing: 0;
             height: auto;
@@ -593,6 +599,7 @@
             overflow: hidden;
             border-radius: 16px;
             border: none;
+            margin: 0;
 
             @include media(550) {
                 border-radius: 10px;

@@ -93,9 +93,16 @@
     scroll-behavior: smooth;
 }
 
+html,
+body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
 body {
     background: linear-gradient(180deg, #0a1628 0%, #001a2c 100%);
     min-height: 100vh;
+    color: white;
 }
 
 // Utility classes for animations
@@ -107,6 +114,20 @@ body {
     animation: fadeInScale 0.5s var(--transition-smooth) forwards;
 }
 
+// Scroll Reveal classes
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+    pointer-events: none;
+
+    &.reveal-visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+}
+
 
 
 .container {
@@ -115,8 +136,8 @@ body {
     padding: 0 15px;
     margin: 0 auto;
 
-    @include media(400) {
-        padding: none;
+    @include media(480) {
+        padding: 0 10px;
     }
 }
 
@@ -173,6 +194,7 @@ body {
     &__p {
         font-size: 18px;
         font-weight: 400;
+        color: rgba(255, 255, 255, 0.9);
 
         @include media(550) {
             font-size: 15px;
@@ -194,3 +216,46 @@ body {
 @import url(../../components/GaleryMain/GMain.scss);
 @import url(../../components/Modal/Modal.scss);
 @import url(../../components/Serts/Sert.scss);
+
+.main-content {
+    padding-top: 74px; // Adjust based on header height
+    min-height: calc(100vh - 74px);
+    transition: padding 0.3s ease;
+
+    @include media(930) {
+        padding-top: 60px;
+    }
+}
+
+.table-wrapper {
+    width: 100%;
+    min-width: 0; // CRITICAL for flex containers
+    max-width: 100%; // Ensure it doesn't exceed parent
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 20px 0;
+    padding-bottom: 10px;
+
+    &::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 168, 255, 0.3);
+        border-radius: 10px;
+
+        &:hover {
+            background: rgba(0, 168, 255, 0.5);
+        }
+    }
+
+    table {
+        min-width: 600px; // Prevent tables from becoming too narrow
+        margin: 0 !important; // Override component margins
+    }
+}
