@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import mainEndCard1 from "../../assets/images/mainCard3.jpg";
+import mainEndCard1 from "../../assets/images/mainEndCard4_new.jpg";
 import mainEndCard2 from "../../assets/images/mainEndCard2Img.jpg";
 import mainEndCard3 from "../../assets/images/mainEndCard3Img.jpg";
 import mainEndCard4 from "../../assets/images/mainEndCard1.jpg";

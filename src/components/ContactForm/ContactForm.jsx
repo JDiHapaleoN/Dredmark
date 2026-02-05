@@ -4,7 +4,7 @@ import Toast from "../Toast/Toast";
 import "./ContactForm.scss";
 
 const ContactForm = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [formData, setFormData] = useState({
         name: "",
         tel: "",
@@ -42,6 +42,7 @@ const ContactForm = () => {
                 body: JSON.stringify({
                     ...formData,
                     source: window.location.pathname || "/",
+                    lang: i18n.language,
                 }),
             });
 

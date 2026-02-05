@@ -42,10 +42,14 @@ const Header = () => {
   };
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null)
+  const burgerRef = useRef(null)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (
+        menuRef.current && !menuRef.current.contains(event.target) &&
+        burgerRef.current && !burgerRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
       }
     };
@@ -56,6 +60,17 @@ const Header = () => {
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('menu-open');
+    } else {
+      document.body.classList.remove('menu-open');
+    }
+    return () => {
+      document.body.classList.remove('menu-open');
     };
   }, [isOpen]);
 
@@ -75,10 +90,10 @@ const Header = () => {
             </ul> : ''}
         </div>
         <NavLink to='/' className='logo'>DREDMARK</NavLink>
-        <div className={`burger ${isOpen ? "open" : ""}`} onClick={() => {
-          setIsOpen(!isOpen)
-        }}>
-          <img src={burger} alt="" />
+        <div ref={burgerRef} className={`burger ${isOpen ? "open" : ""}`} onClick={() => setIsOpen(!isOpen)}>
+          <div className="burger__line"></div>
+          <div className="burger__line"></div>
+          <div className="burger__line"></div>
         </div>
 
         <ul ref={menuRef} className={`nav__list ${isOpen ? "open" : ""}`}>

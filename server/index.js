@@ -372,10 +372,20 @@ cron.schedule('0 9 * * *', async () => {
 
 // API Endpoint
 app.post('/api/contact', async (req, res) => {
+    if (!req.body || Object.keys(req.body).length === 0) {
+        return res.status(400).json({ success: false, error: "Empty request body" });
+    }
+
     const { name, tel, email, message, source } = req.body;
+    const lang = req.body.lang || req.body.lng || 'ru';
+
     const newMsg = {
         id: Date.now().toString(),
-        name, tel, email, message, source,
+        name: name || 'Anonymous',
+        tel: tel || 'Not provided',
+        email: email || '',
+        message: message || '',
+        source: source || '/',
         status: 'new',
         date: new Date().toLocaleString()
     };
@@ -389,23 +399,44 @@ app.post('/api/contact', async (req, res) => {
         bot.telegram.sendMessage(userId, `🚀 *НОВАЯ ЗАЯВКА С САЙТА!*\n\n${formatMessage(newMsg)}`, {
             parse_mode: 'Markdown',
             ...replyButtons(newMsg.id, newMsg.tel, 'new')
-        });
+        }).catch(err => console.error('Telegram Notify Error:', err));
     });
 
     // Send Auto-Reply Email to Client
     if (email && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+        const emailTemplates = {
+            ru: {
+                subject: "Спасибо за ваше обращение — DREDMARK",
+                header: `Здравствуйте, ${name || 'клиент'}!`,
+                body: "Мы получили вашу заявку на сайте <b>Dredmark</b>.<br>Наш специалист свяжется с вами в самое ближайшее время для консультации на русском языке.",
+                footer: "Это автоматическое уведомление. Пожалуйста, не отвечайте на него.<br>С уважением, команда DREDMARK."
+            },
+            en: {
+                subject: "Thank you for your request — DREDMARK",
+                header: `Hello, ${name || 'customer'}!`,
+                body: "We have received your request on the <b>Dredmark</b> website.<br>Our specialist will contact you shortly to provide a consultation in English.",
+                footer: "This is an automated notification. Please do not reply to it.<br>Regards, The DREDMARK Team."
+            },
+            uz: {
+                subject: "Murojaatingiz uchun tashakkur — DREDMARK",
+                header: `Salom, ${name || 'mijoz'}!`,
+                body: "Biz sizning <b>Dredmark</b> saytidagi murojaatingizni qabul qildik.<br>Mutaxassisimiz yaqin orada siz bilan bog'lanadi va o'zbek tilida maslahat beradi.",
+                footer: "Bu avtomatik xabar. Iltimos, unga javob bermang.<br>Hurmat bilan, DREDMARK jamoasi."
+            }
+        };
+
+        const t = emailTemplates[lang] || emailTemplates.ru;
+
         const mailOptions = {
             from: `"DREDMARK Official" <${process.env.EMAIL_USER}>`,
             to: email,
-            subject: "Спасибо за ваше обращение — DREDMARK",
+            subject: t.subject,
             html: `
                 <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-                    <h2 style="color: #0072ff;">Здравствуйте, ${name}!</h2>
-                    <p>Мы получили вашу заявку на сайте <b>Dredmark</b>.</p>
-                    <p>Наш специалист свяжется с вами в самое ближайшее время для консультации.</p>
+                    <h2 style="color: #0072ff;">${t.header}</h2>
+                    <p>${t.body}</p>
                     <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-                    <p style="font-size: 12px; color: #666;">Это автоматическое уведомление. Пожалуйста, не отвечайте на него.</p>
-                    <p style="font-size: 12px; color: #666;">С уважением, команда DREDMARK.</p>
+                    <p style="font-size: 12px; color: #666;">${t.footer}</p>
                 </div>
             `
         };
@@ -418,8 +449,8 @@ app.post('/api/contact', async (req, res) => {
         const adminMailOptions = {
             from: `"DREDMARK Site" <${process.env.EMAIL_USER}>`,
             to: process.env.EMAIL_RECEIVER,
-            subject: `Новая заявка: ${name}`,
-            text: `Имя: ${name}\nТелефон: ${tel}\nEmail: ${email || 'не указан'}\nИсточник: ${source}\n\nСообщение:\n${message}`
+            subject: `Новая заявка: ${name || 'Без имени'}`,
+            text: `Имя: ${name}\nТелефон: ${tel}\nEmail: ${email || 'не указан'}\nИсточник: ${source}\nЯзык: ${lang}\n\nСообщение:\n${message}`
         };
         transporter.sendMail(adminMailOptions).catch(err => console.error('Admin Email Error:', err));
     }

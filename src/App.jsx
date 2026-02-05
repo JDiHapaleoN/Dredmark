@@ -12,6 +12,8 @@ import './i18n'
 import Sert from './components/Serts/Sert'
 import StickyContact from './components/StickyContact/StickyContact'
 import NotFound from './components/NotFound/NotFound'
+import SEO from './components/SEO/SEO'
+
 function App() {
   //   git add .
   //   git commit -m ""
@@ -20,6 +22,7 @@ function App() {
 
     <Router>
       <ScrollToElement />
+      <SEO />
       <Header />
       <main className="main-content">
         <Routes>
