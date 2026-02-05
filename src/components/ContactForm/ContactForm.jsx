@@ -8,6 +8,7 @@ const ContactForm = () => {
     const [formData, setFormData] = useState({
         name: "",
         tel: "",
+        email: "",
         message: "",
     });
     const [toast, setToast] = useState(null);
@@ -46,7 +47,7 @@ const ContactForm = () => {
 
             if (response.ok) {
                 showToast(t("toastSuccess"), "success");
-                setFormData({ name: "", tel: "", message: "" });
+                setFormData({ name: "", tel: "", email: "", message: "" });
             } else {
                 showToast(t("toastError"), "error");
             }
@@ -60,16 +61,30 @@ const ContactForm = () => {
     return (
         <div className="contactForm" id="forma">
             <div className="container">
-                <p>{t("fP2")}</p>
+                <div className="online-indicator">
+                    <div className="pulse-dot"></div>
+                    <span>{t("fOnlineStatus")}</span>
+                </div>
+                <h2>{t("fOnlineHeader")}</h2>
+                <p>{t("fSpecialistWait")}</p>
                 <form onSubmit={onSubmit}>
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder={t("fName")}
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                    />
+                    <div className="form-row">
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder={t("fName")}
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                        />
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder={t("fEmail")}
+                            value={formData.email}
+                            onChange={handleChange}
+                        />
+                    </div>
                     <input
                         type="text"
                         name="tel"
@@ -86,7 +101,7 @@ const ContactForm = () => {
                         required
                     ></textarea>
                     <button type="submit" disabled={loading}>
-                        {loading ? "..." : t("fButton")}
+                        {loading ? t("loading") : t("fButton")}
                     </button>
                 </form>
             </div>

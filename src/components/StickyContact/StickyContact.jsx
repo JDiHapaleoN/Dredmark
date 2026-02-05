@@ -25,7 +25,11 @@ const StickyContact = () => {
     if (!isVisible) return null;
 
     return (
-        <div className="sticky-container">
+        <div className="contact-buttons">
+            <div className="status-badge">
+                <div className="dot"></div>
+                <span> {t("fOnlineStatus")}</span>
+            </div>
             <a
                 href={`https://wa.me/998998516074?text=${encodeURIComponent(t("whatsappMsg"))}`}
                 className="sticky-whatsapp"

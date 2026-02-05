@@ -6,6 +6,7 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const cron = require('node-cron');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -251,6 +252,17 @@ bot.action(/set_status_(.+)_(.+)/, isAdmin, async (ctx) => {
     }
 });
 
+// Email Transporter (Nodemailer)
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: process.env.SMTP_PORT || 465,
+    secure: true,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
 bot.action(/delete_(.+)/, isAdmin, async (ctx) => {
     const msgId = ctx.match[1];
     let messages = loadData(MESSAGES_FILE);
@@ -292,6 +304,7 @@ const formatMessage = (msg) => {
         `───────────────────\n` +
         `👤 *Имя:* ${escapeMd(msg.name)}\n` +
         `📞 *Телефон:* ${msg.tel}\n` +
+        `📧 *Email:* ${msg.email || 'не указан'}\n` +
         `📍 *Страница:* \`${msg.source || '/'}\`\n` +
         `🚥 *Статус:* ${statusIcons[status]} *${statusLabels[status]}*\n` +
         `📅 *Дата:* ${msg.date}\n\n` +
@@ -359,10 +372,10 @@ cron.schedule('0 9 * * *', async () => {
 
 // API Endpoint
 app.post('/api/contact', async (req, res) => {
-    const { name, tel, message, source } = req.body;
+    const { name, tel, email, message, source } = req.body;
     const newMsg = {
         id: Date.now().toString(),
-        name, tel, message, source,
+        name, tel, email, message, source,
         status: 'new',
         date: new Date().toLocaleString()
     };
@@ -371,12 +384,46 @@ app.post('/api/contact', async (req, res) => {
     messages.push(newMsg);
     saveData(MESSAGES_FILE, messages);
 
+    // Send Telegram Notification
     authorizedUsers.forEach(userId => {
         bot.telegram.sendMessage(userId, `🚀 *НОВАЯ ЗАЯВКА С САЙТА!*\n\n${formatMessage(newMsg)}`, {
             parse_mode: 'Markdown',
             ...replyButtons(newMsg.id, newMsg.tel, 'new')
         });
     });
+
+    // Send Auto-Reply Email to Client
+    if (email && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+        const mailOptions = {
+            from: `"DREDMARK Official" <${process.env.EMAIL_USER}>`,
+            to: email,
+            subject: "Спасибо за ваше обращение — DREDMARK",
+            html: `
+                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+                    <h2 style="color: #0072ff;">Здравствуйте, ${name}!</h2>
+                    <p>Мы получили вашу заявку на сайте <b>Dredmark</b>.</p>
+                    <p>Наш специалист свяжется с вами в самое ближайшее время для консультации.</p>
+                    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+                    <p style="font-size: 12px; color: #666;">Это автоматическое уведомление. Пожалуйста, не отвечайте на него.</p>
+                    <p style="font-size: 12px; color: #666;">С уважением, команда DREDMARK.</p>
+                </div>
+            `
+        };
+
+        transporter.sendMail(mailOptions).catch(err => console.error('Email Error:', err));
+    }
+
+    // Send Notification Email to Admin (Dredmark Team)
+    if (process.env.EMAIL_RECEIVER && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+        const adminMailOptions = {
+            from: `"DREDMARK Site" <${process.env.EMAIL_USER}>`,
+            to: process.env.EMAIL_RECEIVER,
+            subject: `Новая заявка: ${name}`,
+            text: `Имя: ${name}\nТелефон: ${tel}\nEmail: ${email || 'не указан'}\nИсточник: ${source}\n\nСообщение:\n${message}`
+        };
+        transporter.sendMail(adminMailOptions).catch(err => console.error('Admin Email Error:', err));
+    }
+
     res.status(200).json({ success: true });
 });
 
