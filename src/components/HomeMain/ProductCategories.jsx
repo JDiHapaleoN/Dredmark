@@ -31,7 +31,7 @@ const ProductCategories = ({
             ModalComp: Modal4
         },
         {
-            img: mainEndCard3,
+            img: mainEndCard2,
             text: t("homeText4Card2"),
             modal: modals.m3,
             open: handlers.o3,
@@ -40,7 +40,7 @@ const ProductCategories = ({
             ModalComp: Modal3
         },
         {
-            img: mainEndCard2,
+            img: mainEndCard3,
             text: t("homeText4Card3"),
             modal: modals.m,
             open: handlers.o,
