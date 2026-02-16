@@ -249,13 +249,8 @@ bot.hears('📉 Статистика', isAdmin, (ctx) => {
         refusal: messages.filter(m => m.status === 'refusal').length
     };
 
-    // Progress bar helper
-    const makeBar = (count, total) => {
-        const percent = Math.round((count / total) * 100);
-        const filled = Math.round(percent / 10);
-        const empty = 10 - filled;
-        return '▓'.repeat(filled) + '░'.repeat(empty) + ` ${percent}%`;
-    };
+    // Calculate percentage helper
+    const percent = (count, total) => total > 0 ? Math.round((count / total) * 100) : 0;
 
     // Calculate source statistics
     const sources = {};
@@ -270,33 +265,23 @@ bot.hears('📉 Статистика', isAdmin, (ctx) => {
 
     let sourceStats = '';
     if (topSources.length > 0) {
-        sourceStats = `\n╔═══ 📍 *ИСТОЧНИКИ ЗАЯВОК* ═══╗\n`;
+        sourceStats = `\n\n*📍 Источники заявок*\n`;
         topSources.forEach(([page, count], i) => {
-            const percent = Math.round((count / stats.total) * 100);
-            const bar = '▓'.repeat(Math.round(percent / 10)) + '░'.repeat(10 - Math.round(percent / 10));
-            sourceStats += `  ${i + 1}. \`${page}\`\n     ${bar} ${count} (${percent}%)\n`;
+            const pct = percent(count, stats.total);
+            sourceStats += `${i + 1}. \`${page}\` — ${count} (${pct}%)\n`;
         });
-        sourceStats += `╚${'═'.repeat(30)}╝`;
     }
 
-    const text = `📊 *ОБЩАЯ СТАТИСТИКА*\n${'━'.repeat(35)}\n\n` +
-        `📈 Всего заявок: *${stats.total}*\n\n` +
-        `╔═══ СТАТУСЫ ЗАЯВОК ═══╗\n` +
-        `  ${statusIcons.new} Новых: *${stats.new}*\n` +
-        `  ${makeBar(stats.new, stats.total)}\n\n` +
-        `  ${statusIcons.processing} В обработке: *${stats.processing}*\n` +
-        `  ${makeBar(stats.processing, stats.total)}\n\n` +
-        `  ${statusIcons.contract} Договор: *${stats.contract}*\n` +
-        `  ${makeBar(stats.contract, stats.total)}\n\n` +
-        `  ${statusIcons.shipped} Отгружено: *${stats.shipped}*\n` +
-        `  ${makeBar(stats.shipped, stats.total)}\n\n` +
-        `  ${statusIcons.done} Завершено: *${stats.done}*\n` +
-        `  ${makeBar(stats.done, stats.total)}\n\n` +
-        `  ${statusIcons.refusal} Отказ: *${stats.refusal}*\n` +
-        `  ${makeBar(stats.refusal, stats.total)}\n` +
-        `╚${'═'.repeat(23)}╝` +
+    const text = `📊 *СТАТИСТИКА*\n\n` +
+        `Всего заявок: *${stats.total}*\n\n` +
+        `${statusIcons.new} Новые — *${stats.new}* (${percent(stats.new, stats.total)}%)\n` +
+        `${statusIcons.processing} В обработке — *${stats.processing}* (${percent(stats.processing, stats.total)}%)\n` +
+        `${statusIcons.contract} Договор — *${stats.contract}* (${percent(stats.contract, stats.total)}%)\n` +
+        `${statusIcons.shipped} Отгружено — *${stats.shipped}* (${percent(stats.shipped, stats.total)}%)\n` +
+        `${statusIcons.done} Завершено — *${stats.done}* (${percent(stats.done, stats.total)}%)\n` +
+        `${statusIcons.refusal} Отказ — *${stats.refusal}* (${percent(stats.refusal, stats.total)}%)` +
         sourceStats +
-        `\n\n📅 Ежедневный отчет в 09:00`;
+        `\n\n📅 Отчет каждый день в 09:00`;
 
     ctx.replyWithMarkdown(text, mainDashboard());
 });
