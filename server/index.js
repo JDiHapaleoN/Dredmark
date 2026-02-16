@@ -293,23 +293,21 @@ const formatMessage = (msg) => {
     const messages = loadData(MESSAGES_FILE);
     const history = messages.filter(m => m.tel === msg.tel && m.id !== msg.id);
     const historyText = history.length > 0
-        ? `\n───────────────────\n📌 *ИСТОРИЯ КЛИЕНТА* (${history.length})\n` +
-        history.slice(-5).map(h => `▫️ ${h.date.split(',')[0]}: ${statusIcons[h.status || 'new']}`).join('\n')
+        ? `\n📌 *История клиента:* ${history.length} ${history.length === 1 ? 'заявка' : 'заявки'}\n` +
+        history.slice(-3).map(h => `  • ${h.date.split(',')[0]} — ${statusIcons[h.status || 'new']} ${statusLabels[h.status || 'new']}`).join('\n')
         : '';
 
     const escapeMd = (text) => (text || '').replace(/([_*\[`])/g, '\\$1');
     const status = msg.status || 'new';
 
-    return `📄 *ДЕТАЛИ ЗАЯВКИ #${msg.id.slice(-4)}*\n` +
-        `───────────────────\n` +
+    return `📄 *ЗАЯВКА #${msg.id.slice(-4)}*\n\n` +
         `👤 *Имя:* ${escapeMd(msg.name)}\n` +
         `📞 *Телефон:* ${msg.tel}\n` +
         `📧 *Email:* ${msg.email || 'не указан'}\n` +
-        `📍 *Страница:* \`${msg.source || '/'}\`\n` +
-        `🚥 *Статус:* ${statusIcons[status]} *${statusLabels[status]}*\n` +
+        `📍 *Источник:* \`${msg.source || '/'}\`\n` +
         `📅 *Дата:* ${msg.date}\n\n` +
-        `✉️ *Сообщение:* \n_${escapeMd(msg.message)}_\n\n` +
-        `💡 _(Нажмите на номер телефона, чтобы позвонить)_` +
+        `🚥 *Статус:* ${statusIcons[status]} *${statusLabels[status]}*\n\n` +
+        `💬 *Сообщение:*\n_${escapeMd(msg.message)}_` +
         historyText;
 };
 
@@ -317,23 +315,34 @@ const replyButtons = (id, tel, status) => {
     const cleanTel = tel ? tel.replace(/\D/g, '') : '';
     const buttons = [];
 
+    // Status buttons - show only logical next steps
+    const statusRow = [];
+    if (!status || status === 'new') {
+        statusRow.push(Markup.button.callback('⏳ В работу', `set_status_processing_${id}`));
+        statusRow.push(Markup.button.callback('❌ Отказ', `set_status_refusal_${id}`));
+    } else if (status === 'processing') {
+        statusRow.push(Markup.button.callback('🤝 Договор', `set_status_contract_${id}`));
+        statusRow.push(Markup.button.callback('❌ Отказ', `set_status_refusal_${id}`));
+    } else if (status === 'contract') {
+        statusRow.push(Markup.button.callback('🚢 Отгружено', `set_status_shipped_${id}`));
+        statusRow.push(Markup.button.callback('❌ Отказ', `set_status_refusal_${id}`));
+    } else if (status === 'shipped') {
+        statusRow.push(Markup.button.callback('✅ Готово', `set_status_done_${id}`));
+    }
+
+    if (statusRow.length > 0) buttons.push(statusRow);
+
+    // Action buttons - only essential ones
     const actionRow = [];
-    if (cleanTel) actionRow.push(Markup.button.url('💬 TG', `https://t.me/+${cleanTel}`));
-    actionRow.push(Markup.button.callback('🗑 Удалить', `delete_${id}`));
-    buttons.push(actionRow);
+    if (cleanTel) actionRow.push(Markup.button.url('💬 Telegram', `https://t.me/+${cleanTel}`));
+    if (status !== 'done' && status !== 'refusal') {
+        actionRow.push(Markup.button.callback('🗑 Удалить', `delete_${id}`));
+    }
+    if (actionRow.length > 0) buttons.push(actionRow);
 
-    const statusRow1 = [];
-    if (status !== 'processing') statusRow1.push(Markup.button.callback('⏳ В работу', `set_status_processing_${id}`));
-    if (status !== 'contract') statusRow1.push(Markup.button.callback('🤝 Договор', `set_status_contract_${id}`));
-    buttons.push(statusRow1);
+    // Navigation
+    buttons.push([Markup.button.callback('🔙 К списку', 'back_to_list')]);
 
-    const statusRow2 = [];
-    if (status !== 'shipped') statusRow2.push(Markup.button.callback('🚢 Отгрузка', `set_status_shipped_${id}`));
-    if (status !== 'done') statusRow2.push(Markup.button.callback('✅ Готово', `set_status_done_${id}`));
-    if (status !== 'refusal') statusRow2.push(Markup.button.callback('❌ Отказ', `set_status_refusal_${id}`));
-    buttons.push(statusRow2);
-
-    buttons.push([Markup.button.callback('🔙 Назад к списку', 'back_to_list')]);
     return Markup.inlineKeyboard(buttons);
 };
 
