@@ -6,9 +6,11 @@
   <link rel="icon" type="image/png" href="/src/assets/images/favicon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DREDMARK – Официальный сайт</title>
-  <meta name="description" content="Официальный сайт DREDMARK - производство земснарядов и оборудования для дноуглубления." />
+  <meta name="description"
+    content="Официальный сайт DREDMARK - производство земснарядов и оборудования для дноуглубления." />
   <meta property="og:title" content="DREDMARK – Официальный сайт" />
-  <meta property="og:description" content="Официальный сайт DREDMARK - производство земснарядов и оборудования для дноуглубления." />
+  <meta property="og:description"
+    content="Официальный сайт DREDMARK - производство земснарядов и оборудования для дноуглубления." />
   <meta property="og:image" content="https://Dredmark.com/src/assets/images/favicon.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:image" content="https://Dredmark.com/src/assets/images/favicon.png">
@@ -34,16 +36,57 @@
       accurateTrackBounce: true
     });
   </script>
- 
- <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17700470068">
-</script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'AW-17700470068');
-</script>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    // Replace G-XXXXXXXXXX with your actual GA4 Measurement ID
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  <!-- End Google Analytics 4 -->
+
+  <!-- Google Ads (existing) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17700470068">
+  </script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'AW-17700470068');
+  </script>
+  <!-- End Google Ads -->
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+ {
+   "@context": "https://schema.org",
+   "@type": ["Organization", "LocalBusiness"],
+   "name": "DREDMARK",
+   "url": "https://dredmark.com",
+   "logo": "https://dredmark.com/src/assets/images/favicon.png",
+   "description": "Производство земснарядов и оборудования для дноуглубления",
+   "email": "dredmark.websites@gmail.com",
+   "telephone": "+998974075793",
+   "address": {
+     "@type": "PostalAddress",
+     "addressCountry": "UZ"
+   },
+   "sameAs": [
+     "https://t.me/+998974075793"
+   ],
+   "contactPoint": {
+     "@type": "ContactPoint",
+     "telephone": "+998974075793",
+     "contactType": "Customer Service",
+     "availableLanguage": ["Russian", "English", "Uzbek"]
+   }
+ }
+ </script>
+  <!-- End Structured Data -->
 
 </head>
 

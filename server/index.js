@@ -160,10 +160,57 @@ bot.hears('📑 Список заявок', isAdmin, (ctx) => {
         Markup.button.callback(`${statusIcons[msg.status || 'new']} ${msg.name} | ${msg.date.split(',')[0]}`, `view_${msg.id}`)
     ]);
 
+    // Add filter buttons
+    const filterButtons = [
+        Markup.button.callback('Все', 'filter_all'),
+        Markup.button.callback('🆕 Новые', 'filter_new'),
+        Markup.button.callback('⏳ В работе', 'filter_processing'),
+        Markup.button.callback('✅ Завершенные', 'filter_completed')
+    ];
+
     ctx.reply(`📂 *ПОСЛЕДНИЕ ЗАЯВКИ* [${items.length}]\n───────────────────\nНажмите на заявку для просмотра деталей:`, {
         parse_mode: 'Markdown',
-        ...Markup.inlineKeyboard(buttons)
+        ...Markup.inlineKeyboard([filterButtons, ...buttons])
     });
+});
+
+// Filter actions
+bot.action(/filter_(.+)/, isAdmin, (ctx) => {
+    const filter = ctx.match[1];
+    const messages = loadData(MESSAGES_FILE);
+
+    let filtered = messages;
+    let filterLabel = 'Все';
+
+    if (filter === 'new') {
+        filtered = messages.filter(m => !m.status || m.status === 'new');
+        filterLabel = '🆕 Новые';
+    } else if (filter === 'processing') {
+        filtered = messages.filter(m => m.status === 'processing' || m.status === 'contract' || m.status === 'shipped');
+        filterLabel = '⏳ В работе';
+    } else if (filter === 'completed') {
+        filtered = messages.filter(m => m.status === 'done' || m.status === 'refusal');
+        filterLabel = '✅ Завершенные';
+    }
+
+    const limit = 25;
+    const items = filtered.slice(-limit).reverse();
+    const buttons = items.map(msg => [
+        Markup.button.callback(`${statusIcons[msg.status || 'new']} ${msg.name} | ${msg.date.split(',')[0]}`, `view_${msg.id}`)
+    ]);
+
+    const filterButtons = [
+        Markup.button.callback('Все', 'filter_all'),
+        Markup.button.callback('🆕 Новые', 'filter_new'),
+        Markup.button.callback('⏳ В работе', 'filter_processing'),
+        Markup.button.callback('✅ Завершенные', 'filter_completed')
+    ];
+
+    ctx.editMessageText(`📂 *${filterLabel.toUpperCase()}* [${items.length}]\n───────────────────\nНажмите на заявку для просмотра деталей:`, {
+        parse_mode: 'Markdown',
+        ...Markup.inlineKeyboard([filterButtons, ...buttons])
+    });
+    ctx.answerCbQuery();
 });
 
 bot.hears('🔍 Поиск', isAdmin, (ctx) => {
@@ -202,6 +249,26 @@ bot.hears('📉 Статистика', isAdmin, (ctx) => {
         refusal: messages.filter(m => m.status === 'refusal').length
     };
 
+    // Calculate source statistics
+    const sources = {};
+    messages.forEach(m => {
+        const src = m.source || '/';
+        sources[src] = (sources[src] || 0) + 1;
+    });
+
+    const topSources = Object.entries(sources)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+
+    let sourceStats = '';
+    if (topSources.length > 0) {
+        sourceStats = `\n📍 *Источники заявок:*\n`;
+        topSources.forEach(([page, count], i) => {
+            const percent = Math.round((count / stats.total) * 100);
+            sourceStats += `${i + 1}. \`${page}\`: ${count} (${percent}%)\n`;
+        });
+    }
+
     const text = `📊 *ОБЩАЯ СТАТИСТИКА*\n───────────────────\n` +
         `📈 Всего заявок: *${stats.total}*\n\n` +
         `${statusIcons.new} Новых: *${stats.new}*\n` +
@@ -209,8 +276,9 @@ bot.hears('📉 Статистика', isAdmin, (ctx) => {
         `${statusIcons.contract} Договор: *${stats.contract}*\n` +
         `${statusIcons.shipped} Отгружено: *${stats.shipped}*\n` +
         `${statusIcons.done} Завершено: *${stats.done}*\n` +
-        `${statusIcons.refusal} Отказ: *${stats.refusal}*\n\n` +
-        `📅 Сводный отчет каждый день в 09:00.`;
+        `${statusIcons.refusal} Отказ: *${stats.refusal}*` +
+        sourceStats +
+        `\n📅 Сводный отчет каждый день в 09:00.`;
 
     ctx.replyWithMarkdown(text, mainDashboard());
 });
@@ -275,6 +343,65 @@ bot.action(/delete_(.+)/, isAdmin, async (ctx) => {
     });
 });
 
+bot.action(/reply_(.+)/, isAdmin, async (ctx) => {
+    const msgId = ctx.match[1];
+    const messages = loadData(MESSAGES_FILE);
+    const msg = messages.find(m => m.id === msgId);
+    if (!msg) return ctx.answerCbQuery('❌ Заявка не найдена');
+
+    const templates = [
+        Markup.button.callback('Получили заявку ✅', `template_received_${msgId}`),
+        Markup.button.callback('Скоро свяжемся 📞', `template_contact_${msgId}`),
+        Markup.button.callback('Нужно уточнение ❓', `template_clarify_${msgId}`),
+        Markup.button.callback('🔙 Назад', `view_${msgId}`)
+    ];
+
+    ctx.editMessageText(
+        `💬 *ВЫБЕРИТЕ ШАБЛОН ОТВЕТА*\n───────────────────\n\n` +
+        `📱 **Клиент:** ${msg.name}\n` +
+        `📞 **Телефон:** ${msg.tel}\n\n` +
+        `Выберите готовый шаблон или отправьте свое сообщение:`,
+        {
+            parse_mode: 'Markdown',
+            ...Markup.inlineKeyboard([templates.slice(0, 2), templates.slice(2)])
+        }
+    );
+    ctx.answerCbQuery();
+});
+
+bot.action(/template_(.+)_(.+)/, isAdmin, async (ctx) => {
+    const templateType = ctx.match[1];
+    const msgId = ctx.match[2];
+    const messages = loadData(MESSAGES_FILE);
+    const msg = messages.find(m => m.id === msgId);
+    if (!msg) return ctx.answerCbQuery('❌ Заявка не найдена');
+
+    const templates = {
+        received: `Здравствуйте! Мы получили вашу заявку на сайте DREDMARK. Наш специалист свяжется с вами в ближайшее время для консультации. С уважением, команда DREDMARK.`,
+        contact: `Добрый день! Благодарим за обращение в DREDMARK. Мы скоро свяжемся с вами для обсуждения деталей. Хорошего дня!`,
+        clarify: `Здравствуйте! Для подготовки коммерческого предложения нам нужно уточнить несколько деталей. Пожалуйста, ответьте на этот номер или напишите в WhatsApp: +998974075793`
+    };
+
+    const template = templates[templateType];
+    const phoneLink = `https://wa.me/${msg.tel.replace(/\D/g, '')}?text=${encodeURIComponent(template)}`;
+
+    ctx.answerCbQuery('✅ Откройте WhatsApp для отправки');
+    ctx.editMessageText(
+        `✅ *ШАБЛОН ГОТОВ*\n───────────────────\n\n` +
+        `📱 **Клиент:** ${msg.name}\n` +
+        `📞 **Телефон:** ${msg.tel}\n\n` +
+        `📝 **Текст сообщения:**\n_${template}_\n\n` +
+        `👇 Нажмите кнопку ниже, чтобы отправить:`,
+        {
+            parse_mode: 'Markdown',
+            ...Markup.inlineKeyboard([
+                [Markup.button.url('📱 Отправить в WhatsApp', phoneLink)],
+                [Markup.button.callback('🔙 К заявке', `view_${msgId}`)]
+            ])
+        }
+    );
+});
+
 bot.action('back_to_list', isAdmin, (ctx) => {
     const messages = loadData(MESSAGES_FILE);
     const limit = 25;
@@ -336,6 +463,7 @@ const replyButtons = (id, tel, status) => {
     const actionRow = [];
     if (cleanTel) actionRow.push(Markup.button.url('💬 Telegram', `https://t.me/+${cleanTel}`));
     actionRow.push(Markup.button.callback('🗑 Удалить', `delete_${id}`));
+    actionRow.push(Markup.button.callback('💬 Ответить...', `reply_${id}`));
     if (actionRow.length > 0) buttons.push(actionRow);
 
     // Navigation
@@ -343,6 +471,35 @@ const replyButtons = (id, tel, status) => {
 
     return Markup.inlineKeyboard(buttons);
 };
+
+// Stale Request Reminders (9:00 daily)
+cron.schedule('0 9 * * *', async () => {
+    const messages = loadData(MESSAGES_FILE);
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+
+    const staleRequests = messages.filter(m => {
+        if (m.status === 'done' || m.status === 'refusal') return false;
+        const msgDate = new Date(m.date);
+        return msgDate < threeDaysAgo;
+    });
+
+    if (staleRequests.length > 0) {
+        let reminder = `⏰ *НАПОМИНАНИЕ*\n───────────────────\n`;
+        reminder += `У вас ${staleRequests.length} заявок без изменений более 3 дней:\n\n`;
+
+        staleRequests.slice(0, 10).forEach((m, i) => {
+            const daysSince = Math.floor((new Date() - new Date(m.date)) / (1000 * 60 * 60 * 24));
+            reminder += `${i + 1}. ${statusIcons[m.status || 'new']} ${m.name} (${daysSince} дней)\n`;
+        });
+
+        reminder += `\n💡 Рекомендуем связаться с клиентами.`;
+
+        authorizedUsers.forEach(userId => {
+            bot.telegram.sendMessage(userId, reminder, { parse_mode: 'Markdown' }).catch(console.error);
+        });
+    }
+});
 
 // Daily Report
 cron.schedule('0 9 * * *', async () => {

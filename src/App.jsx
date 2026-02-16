@@ -13,6 +13,7 @@ import Sert from './components/Serts/Sert'
 import StickyContact from './components/StickyContact/StickyContact'
 import NotFound from './components/NotFound/NotFound'
 import SEO from './components/SEO/SEO'
+import WhatsAppWidget from './components/WhatsAppWidget/WhatsAppWidget'
 
 function App() {
   //   git add .
@@ -37,6 +38,7 @@ function App() {
       </main>
       <Footer />
       <StickyContact />
+      <WhatsAppWidget />
     </Router>
   )
 }
