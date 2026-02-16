@@ -7,9 +7,9 @@
 .modal {
     position: fixed;
     inset: 0;
-    background: rgba(0, 20, 40, 0.85);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     z-index: 9999;
     display: flex;
     justify-content: center;
@@ -68,9 +68,14 @@
 
         &-video {
             video {
-                width: 500px;
-                height: 310px;
+                width: 800px;
+                height: 500px;
                 border-radius: 12px;
+
+                @media(max-width: 900px) {
+                    width: 90vw;
+                    height: auto;
+                }
             }
         }
     }
