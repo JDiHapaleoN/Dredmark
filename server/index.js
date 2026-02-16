@@ -335,9 +335,7 @@ const replyButtons = (id, tel, status) => {
     // Action buttons - only essential ones
     const actionRow = [];
     if (cleanTel) actionRow.push(Markup.button.url('💬 Telegram', `https://t.me/+${cleanTel}`));
-    if (status !== 'done' && status !== 'refusal') {
-        actionRow.push(Markup.button.callback('🗑 Удалить', `delete_${id}`));
-    }
+    actionRow.push(Markup.button.callback('🗑 Удалить', `delete_${id}`));
     if (actionRow.length > 0) buttons.push(actionRow);
 
     // Navigation
