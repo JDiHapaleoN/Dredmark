@@ -356,11 +356,14 @@ bot.action(/reply_(.+)/, isAdmin, async (ctx) => {
         Markup.button.callback('🔙 Назад', `view_${msgId}`)
     ];
 
+    const langLabel = msg.lang === 'en' ? '🇬🇧 English' : msg.lang === 'uz' ? '🇺🇿 O\'zbek' : '🇷🇺 Русский';
+
     ctx.editMessageText(
         `💬 *ВЫБЕРИТЕ ШАБЛОН ОТВЕТА*\n───────────────────\n\n` +
         `📱 **Клиент:** ${msg.name}\n` +
-        `📞 **Телефон:** ${msg.tel}\n\n` +
-        `Выберите готовый шаблон или отправьте свое сообщение:`,
+        `📞 **Телефон:** ${msg.tel}\n` +
+        `🌍 **Язык:** ${langLabel}\n\n` +
+        `Выберите готовый шаблон:`,
         {
             parse_mode: 'Markdown',
             ...Markup.inlineKeyboard([templates.slice(0, 2), templates.slice(2)])
@@ -376,26 +379,45 @@ bot.action(/template_(.+)_(.+)/, isAdmin, async (ctx) => {
     const msg = messages.find(m => m.id === msgId);
     if (!msg) return ctx.answerCbQuery('❌ Заявка не найдена');
 
+    const lang = msg.lang || 'ru';
+
+    // Multilingual templates
     const templates = {
-        received: `Здравствуйте! Мы получили вашу заявку на сайте DREDMARK. Наш специалист свяжется с вами в ближайшее время для консультации. С уважением, команда DREDMARK.`,
-        contact: `Добрый день! Благодарим за обращение в DREDMARK. Мы скоро свяжемся с вами для обсуждения деталей. Хорошего дня!`,
-        clarify: `Здравствуйте! Для подготовки коммерческого предложения нам нужно уточнить несколько деталей. Пожалуйста, ответьте на этот номер или напишите в WhatsApp: +998974075793`
+        received: {
+            ru: `Здравствуйте! Мы получили вашу заявку на сайте DREDMARK. Наш специалист свяжется с вами в ближайшее время для консультации. С уважением, команда DREDMARK.`,
+            en: `Hello! We have received your request on the DREDMARK website. Our specialist will contact you shortly for consultation. Best regards, DREDMARK team.`,
+            uz: `Salom! Biz DREDMARK saytidan so'rovingizni qabul qildik. Mutaxassisimiz yaqin orada maslahat uchun siz bilan bog'lanadi. Hurmat bilan, DREDMARK jamoasi.`
+        },
+        contact: {
+            ru: `Добрый день! Благодарим за обращение в DREDMARK. Мы скоро свяжемся с вами для обсуждения деталей. Хорошего дня!`,
+            en: `Good day! Thank you for contacting DREDMARK. We will get in touch with you soon to discuss the details. Have a great day!`,
+            uz: `Xayrli kun! DREDMARK ga murojaat qilganingiz uchun tashakkur. Tafsilotlarni muhokama qilish uchun tez orada siz bilan bog'lanamiz. Yaxshi kun tilaymiz!`
+        },
+        clarify: {
+            ru: `Здравствуйте! Для подготовки коммерческого предложения нам нужно уточнить несколько деталей. Пожалуйста, ответьте на этот номер или напишите в WhatsApp: +998974075793`,
+            en: `Hello! To prepare a commercial offer, we need to clarify a few details. Please reply to this number or message us on WhatsApp: +998974075793`,
+            uz: `Salom! Tijorat taklifini tayyorlash uchun bir nechta tafsilotlarni aniqlashtir ishimiz kerak. Iltimos, ushbu raqamga javob bering yoki WhatsApp orqali yozing: +998974075793`
+        }
     };
 
-    const template = templates[templateType];
-    const phoneLink = `https://wa.me/${msg.tel.replace(/\D/g, '')}?text=${encodeURIComponent(template)}`;
+    const template = templates[templateType][lang];
+    const cleanTel = msg.tel.replace(/\D/g, '');
+    const whatsappLink = `https://wa.me/${cleanTel}?text=${encodeURIComponent(template)}`;
+    const telegramLink = `https://t.me/+${cleanTel}`;
 
-    ctx.answerCbQuery('✅ Откройте WhatsApp для отправки');
+    ctx.answerCbQuery('✅ Выберите способ отправки');
     ctx.editMessageText(
         `✅ *ШАБЛОН ГОТОВ*\n───────────────────\n\n` +
         `📱 **Клиент:** ${msg.name}\n` +
-        `📞 **Телефон:** ${msg.tel}\n\n` +
+        `📞 **Телефон:** ${msg.tel}\n` +
+        `🌍 **Язык:** ${lang === 'en' ? '🇬🇧 English' : lang === 'uz' ? '🇺🇿 O\'zbek' : '🇷🇺 Русский'}\n\n` +
         `📝 **Текст сообщения:**\n_${template}_\n\n` +
-        `👇 Нажмите кнопку ниже, чтобы отправить:`,
+        `👇 Выберите способ отправки:`,
         {
             parse_mode: 'Markdown',
             ...Markup.inlineKeyboard([
-                [Markup.button.url('📱 Отправить в WhatsApp', phoneLink)],
+                [Markup.button.url('📱 WhatsApp', whatsappLink)],
+                [Markup.button.url('✈️ Telegram', telegramLink)],
                 [Markup.button.callback('🔙 К заявке', `view_${msgId}`)]
             ])
         }
