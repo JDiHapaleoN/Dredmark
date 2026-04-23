@@ -57,7 +57,7 @@ const VozmMain = () => {
         </RevealSection>
       </div>
       <RevealSection className="vozmMain__section2">
-        <h1 id='homeEnd' className="vozmMain__section2-h1">{t('vozmNavLink1')}</h1>
+        <h2 id='homeEnd' className="vozmMain__section2-h1">{t('vozmNavLink1')}</h2>
         <h3 className="vozmMain__section2-h3">{t("vozmMainSection2H3")}</h3>
         <p className="vozmMain__section2-p">{t("vozmMainSection2P")}
         </p>
@@ -340,7 +340,7 @@ const VozmMain = () => {
       <div className="vozmMain__section9 vozmSection">
         <div className="container">
           <div className="vozmMain__section9-block1">
-            <h1 id='homeEnd4' className="vozmMain__section2-h1">{t('vozmNavLink5')}</h1>
+            <h2 id='homeEnd4' className="vozmMain__section2-h1">{t('vozmNavLink5')}</h2>
 
             <p className="vozmMain__section9-block1-p1">
               {t('vozmSection9Text1')}
@@ -361,8 +361,8 @@ const VozmMain = () => {
       <div className="vozmMain__section10 vozmSection">
         <div className="container">
           <div className="vozmMain__section10-block1">
-            <h3 id='homeEnd5' className="vozmMain__section2-h1">
-              {t('vozmNavLink6')}</h3>
+            <h2 id='homeEnd5' className="vozmMain__section2-h1">
+              {t('vozmNavLink6')}</h2>
             <p className="vozmMain__section10-block1-p1">
               {t('vozmSection10Text1')}
             </p>
@@ -401,23 +401,28 @@ const VozmMain = () => {
           <li>{t('seoText5')}</li>
         </ul>
       </div>
-      <div className="seo">
-        <h2>производитель земснарядов Узбекистан</h2>
-        <h2>• земснаряд под заказ</h2>
-        <h2>• как работает земснаряд</h2>
-        <h2>• земснаряд для реки</h2>
-        <h2>• земснаряд для озера</h2>
-        <h2>• насосный земснаряд</h2>
-        <h2>• шланг для земснаряда</h2>
-        <h2>• дизельный земснаряд</h2>
-        <h2>• китайский земснаряд против местного</h2>
-        <h2>• аренда земснаряда</h2>
-        <h2>• чертеж земснаряда</h2>
-        <h2>• земснаряд с гидроразмывом</h2>
-        <h2>• земснаряд на гусеницах</h2>
-        <h2>• земснаряд своими руками (для статьи-приманки)</h2>
-
-      </div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "itemListElement": [
+            {
+              "@type": "Product",
+              "name": "DREDMARK 4000/60",
+              "description": "High-performance dredger 4000 m³/h",
+              "brand": { "@type": "Brand", "name": "DREDMARK" },
+              "offers": { "@type": "AggregateOffer", "availability": "https://schema.org/PreOrder", "priceCurrency": "RUB", "lowPrice": "45000000" }
+            },
+            {
+              "@type": "Product",
+              "name": "DREDMARK 2000/63",
+              "description": "Industrial dredger 2000 m³/h",
+              "brand": { "@type": "Brand", "name": "DREDMARK" },
+              "offers": { "@type": "AggregateOffer", "availability": "https://schema.org/PreOrder", "priceCurrency": "RUB", "lowPrice": "30000000" }
+            }
+          ]
+        })
+      }} />
       <ContactForm />
     </div>
 

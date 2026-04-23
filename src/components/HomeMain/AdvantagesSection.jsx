@@ -20,23 +20,31 @@ const AdvantagesSection = ({ isModal2Open, openModal2Handler, closeModal2Handler
         <div className="home__block2 reveal" ref={revealRef}>
             <img src={homeImgSw1} alt={t("homeAdvTitle")} loading="lazy" />
             <div className="home__block2-box">
-                <h5 className="home__block2-subtitle">{t("homeText3")}</h5>
-                <h4 className="home__block2-h4">{t("homeAdvTitle")}</h4>
+                <span className="home__block2-subtitle" style={{ display: 'block', marginBottom: '10px' }}>{t("homeText3")}</span>
+                <h2 className="homeMain__h2" style={{ textAlign: 'left', margin: '0 0 40px 0' }}>{t("homeAdvTitle")}</h2>
                 {isModal2Open && <Modal2 closeModal2={closeModal2Handler} />}
                 <div className="home__block2-content">
                     <ul className="home__block2-adv">
-                        {advantages.map((adv, i) => (
-                            <li key={i}>
-                                <p className="home__block2-adv-text">
-                                    <span>✓</span> {adv.text}
-                                </p>
-                                <p className="home__block2-adv-subtext">{adv.sub}</p>
-                            </li>
-                        ))}
+                        {advantages.map((adv, i) => {
+                            const icons = ["🏭", "💰", "⚙️", "🔧", "🛡️"];
+                            return (
+                                <li key={i}>
+                                    <p className="home__block2-adv-text">
+                                        <span style={{ fontSize: "28px", marginRight: "5px" }}>{icons[i] || "✓"}</span> {adv.text}
+                                    </p>
+                                    <p className="home__block2-adv-subtext">{adv.sub}</p>
+                                </li>
+                            );
+                        })}
                     </ul>
-                    <button className="home__block2-btn" onClick={openModal2Handler}>
-                        {t("homeText3Link")}
-                    </button>
+                    <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', marginTop: '20px' }}>
+                        <a href="#forma" className="home__block2-btn" style={{ textDecoration: 'none', background: '#00a8ff', borderColor: '#00a8ff', color: '#fff' }}>
+                            {t("fButton")}
+                        </a>
+                        <button className="home__block2-btn" onClick={openModal2Handler}>
+                            {t("homeText3Link")}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

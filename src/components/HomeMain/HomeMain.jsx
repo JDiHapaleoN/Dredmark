@@ -5,6 +5,9 @@ import ProductTable from "./ProductTable";
 import AdvantagesSection from "./AdvantagesSection";
 import ProductCategories from "./ProductCategories";
 import RealProjects from "./RealProjects";
+import TrustBar from "../TrustBar/TrustBar";
+import ProcessSection from "../ProcessSection/ProcessSection";
+import SpecHighlights from "./SpecHighlights";
 
 const HomeMain = () => {
   const { t } = useTranslation();
@@ -37,6 +40,9 @@ const HomeMain = () => {
         <p>{t("homeText1")}</p>
       </div>
 
+      <TrustBar />
+      <SpecHighlights />
+
       <ProductTable />
 
       <AdvantagesSection
@@ -64,13 +70,9 @@ const HomeMain = () => {
 
       <RealProjects />
 
-      <ContactForm />
+      <ProcessSection />
 
-      <div className="seo">
-        <h2>{t("seoBuy")}</h2>
-        <h2>{t("seoProducer")}</h2>
-        <h2>{t("seoPrice")}</h2>
-      </div>
+      <ContactForm />
     </div>
   );
 };

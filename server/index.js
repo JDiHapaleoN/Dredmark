@@ -7,6 +7,8 @@ const fs = require('fs');
 const path = require('path');
 const cron = require('node-cron');
 const nodemailer = require('nodemailer');
+const archiver = require('archiver');
+const si = require('systeminformation');
 
 const app = express();
 const port = process.env.PORT || 5001;
@@ -16,21 +18,53 @@ const MESSAGES_FILE = path.join(__dirname, 'messages.json');
 const USERS_FILE = path.join(__dirname, 'users.json');
 const VISITS_FILE = path.join(__dirname, 'visits.json');
 
-const loadData = (file) => {
-    if (!fs.existsSync(file)) return file.endsWith('.json') && !file.includes('messages') && !file.includes('users') ? {} : [];
+const loadData = (file, defaultValue = []) => {
+    if (!fs.existsSync(file)) {
+        if (!fs.existsSync(path.dirname(file))) {
+            fs.mkdirSync(path.dirname(file), { recursive: true });
+        }
+        fs.writeFileSync(file, JSON.stringify(defaultValue, null, 2));
+        return defaultValue;
+    }
     try {
-        return JSON.parse(fs.readFileSync(file, 'utf8'));
+        const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+        return data;
     } catch (e) {
-        return [];
+        console.error(`Error loading ${file}:`, e);
+        return defaultValue;
     }
 };
 
 const saveData = (file, data) => {
-    fs.writeFileSync(file, JSON.stringify(data, null, 2));
+    const tempFile = `${file}.tmp`;
+    try {
+        fs.writeFileSync(tempFile, JSON.stringify(data, null, 2));
+        fs.renameSync(tempFile, file);
+    } catch (e) {
+        console.error(`Error saving ${file}:`, e);
+        if (fs.existsSync(tempFile)) fs.unlinkSync(tempFile);
+    }
 };
 
 // Middleware
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        // or if the origin matches our environment variable (with wildcards or exact match)
+        const allowedOrigin = process.env.CORS_ORIGIN || '*';
+        if (!origin || allowedOrigin === '*' || origin === allowedOrigin || allowedOrigin.split(',').includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // Visit Logging
@@ -55,6 +89,15 @@ app.post('/api/visit', (req, res) => {
     res.status(200).send('OK');
 });
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'UP', 
+        time: new Date().toISOString(),
+        bot: bot.token ? 'Initialized' : 'Missing Token'
+    });
+});
+
 // Telegram Bot
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -71,8 +114,9 @@ const isAdmin = (ctx, next) => {
 const mainDashboard = () => {
     return Markup.keyboard([
         ['📑 Список заявок', '🔍 Поиск'],
-        ['📉 Статистика', '💾 Экспорт CSV'],
-        ['🚪 Выход']
+        ['📉 Статистика', '⚡️ Live-монитор'],
+        ['📦 Бэкап базы', '🖥 Состояние VPS'],
+        ['💾 Экспорт CSV', '🚪 Выход']
     ]).resize();
 };
 
@@ -239,6 +283,22 @@ bot.hears('💾 Экспорт CSV', isAdmin, async (ctx) => {
 
 bot.hears('📉 Статистика', isAdmin, (ctx) => {
     const messages = loadData(MESSAGES_FILE);
+    const visits = loadData(VISITS_FILE, {});
+
+    const today = new Date().toLocaleDateString();
+    const yesterdayDate = new Date();
+    yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+    const yesterday = yesterdayDate.toLocaleDateString();
+
+    const todayVisits = (visits[today] && visits[today].total) || 0;
+    const yesterdayVisits = (visits[yesterday] && visits[yesterday].total) || 0;
+
+    let trendVisits = '';
+    if (yesterdayVisits > 0) {
+        const diff = ((todayVisits - yesterdayVisits) / yesterdayVisits) * 100;
+        trendVisits = diff >= 0 ? ` (+${diff.toFixed(1)}% 📈)` : ` (${diff.toFixed(1)}% 📉)`;
+    }
+
     const stats = {
         total: messages.length,
         new: messages.filter(m => !m.status || m.status === 'new').length,
@@ -249,10 +309,8 @@ bot.hears('📉 Статистика', isAdmin, (ctx) => {
         refusal: messages.filter(m => m.status === 'refusal').length
     };
 
-    // Calculate percentage helper
     const percent = (count, total) => total > 0 ? Math.round((count / total) * 100) : 0;
 
-    // Calculate source statistics
     const sources = {};
     messages.forEach(m => {
         const src = m.source || '/';
@@ -273,7 +331,8 @@ bot.hears('📉 Статистика', isAdmin, (ctx) => {
     }
 
     const text = `📊 *СТАТИСТИКА*\n\n` +
-        `Всего заявок: *${stats.total}*\n\n` +
+        `Всего заявок: *${stats.total}*\n` +
+        `Визиты сегодня: *${todayVisits}*${trendVisits}\n\n` +
         `${statusIcons.new} Новые — *${stats.new}* (${percent(stats.new, stats.total)}%)\n` +
         `${statusIcons.processing} В обработке — *${stats.processing}* (${percent(stats.processing, stats.total)}%)\n` +
         `${statusIcons.contract} Договор — *${stats.contract}* (${percent(stats.contract, stats.total)}%)\n` +
@@ -281,9 +340,88 @@ bot.hears('📉 Статистика', isAdmin, (ctx) => {
         `${statusIcons.done} Завершено — *${stats.done}* (${percent(stats.done, stats.total)}%)\n` +
         `${statusIcons.refusal} Отказ — *${stats.refusal}* (${percent(stats.refusal, stats.total)}%)` +
         sourceStats +
-        `\n\n📅 Отчет каждый день в 09:00`;
+        `\n\n📅 На текущий момент: ${new Date().toLocaleString()}`;
 
     ctx.replyWithMarkdown(text, mainDashboard());
+});
+
+bot.hears('⚡️ Live-монитор', isAdmin, async (ctx) => {
+    const messages = loadData(MESSAGES_FILE);
+    const last10 = messages.slice(-10).reverse();
+
+    if (last10.length === 0) return ctx.reply('Журнал пуст.');
+
+    let text = `⚡️ *ПОСЛЕДНЯЯ АКТИВНОСТЬ (Top 10)*\n───────────────────\n\n`;
+    last10.forEach((m, i) => {
+        text += `${i + 1}. *${m.name}* (${m.date.split(',')[1].trim()}) — ${statusIcons[m.status || 'new']}\n`;
+    });
+
+    ctx.replyWithMarkdown(text);
+});
+
+bot.hears('📦 Бэкап базы', isAdmin, async (ctx) => {
+    const waitMsg = await ctx.reply('💿 Формирование архива базы данных...');
+
+    try {
+        const zipFile = path.join(__dirname, `backup_${Date.now()}.zip`);
+        const output = fs.createWriteStream(zipFile);
+        const archive = archiver('zip', { zlib: { level: 9 } });
+
+        output.on('close', async () => {
+            await ctx.deleteMessage(waitMsg.message_id);
+            await ctx.replyWithDocument({ source: zipFile, filename: path.basename(zipFile) }, {
+                caption: '🔐 *ПОЛНЫЙ БЭКАП БАЗЫ*\nСодержит все JSON файлы системы.',
+                parse_mode: 'Markdown'
+            });
+            fs.unlinkSync(zipFile);
+        });
+
+        archive.on('error', (err) => { throw err; });
+        archive.pipe(output);
+
+        // Add all JSON files
+        fs.readdirSync(__dirname).forEach(file => {
+            if (file.endsWith('.json')) {
+                archive.file(path.join(__dirname, file), { name: file });
+            }
+        });
+
+        await archive.finalize();
+    } catch (e) {
+        ctx.reply('❌ Ошибка при создании бэкапа: ' + e.message);
+    }
+});
+
+bot.hears('🖥 Состояние VPS', isAdmin, async (ctx) => {
+    const waitMsg = await ctx.reply('🔍 Сбор данных системы...');
+
+    try {
+        const [cpu, mem, load, disk] = await Promise.all([
+            si.cpu(),
+            si.mem(),
+            si.currentLoad(),
+            si.fsSize()
+        ]);
+
+        const totalDisk = disk[0].size;
+        const usedDisk = disk[0].used;
+        const diskPercent = ((usedDisk / totalDisk) * 100).toFixed(1);
+
+        const memUsed = ((mem.active / mem.total) * 100).toFixed(1);
+
+        const text = `🖥 *СОСТОЯНИЕ СЕРВЕРА*\n───────────────────\n\n` +
+            `🔹 **CPU:** ${cpu.manufacturer} ${cpu.brand}\n` +
+            `🔹 **Загрузка:** ${load.currentLoad.toFixed(1)}%\n` +
+            `🔹 **Memory:** ${memUsed}% (${(mem.active / 1024 / 1024 / 1024).toFixed(1)}GB / ${(mem.total / 1024 / 1024 / 1024).toFixed(1)}GB)\n` +
+            `🔹 **Disk:** ${diskPercent}% (${(usedDisk / 1024 / 1024 / 1024).toFixed(1)}GB / ${(totalDisk / 1024 / 1024 / 1024).toFixed(1)}GB)\n` +
+            `🔹 **Uptime:** ${Math.floor(si.time().uptime / 3600)} часов\n\n` +
+            `✅ Система работает стабильно.`;
+
+        await ctx.deleteMessage(waitMsg.message_id);
+        ctx.replyWithMarkdown(text);
+    } catch (e) {
+        ctx.reply('❌ Ошибка сбора статистики: ' + e.message);
+    }
 });
 
 bot.hears('🚪 Выход', isAdmin, (ctx) => {
@@ -459,6 +597,8 @@ const formatMessage = (msg) => {
         `📍 *Источник:* \`${msg.source || '/'}\`\n` +
         `📅 *Дата:* ${msg.date}\n\n` +
         `🚥 *Статус:* ${statusIcons[status]} *${statusLabels[status]}*\n\n` +
+        (msg.projectType ? `🏗 *Тип проекта:* ${escapeMd(msg.projectType)}\n` : '') +
+        (msg.capacity ? `⚙️ *Производительность:* ${escapeMd(msg.capacity)}\n` : '') +
         `💬 *Сообщение:*\n_${escapeMd(msg.message)}_` +
         historyText;
 };
@@ -565,7 +705,7 @@ app.post('/api/contact', async (req, res) => {
         return res.status(400).json({ success: false, error: "Empty request body" });
     }
 
-    const { name, tel, email, message, source } = req.body;
+    const { name, tel, email, message, source, projectType, capacity } = req.body;
     const lang = req.body.lang || req.body.lng || 'ru';
 
     const newMsg = {
@@ -573,6 +713,8 @@ app.post('/api/contact', async (req, res) => {
         name: name || 'Anonymous',
         tel: tel || 'Not provided',
         email: email || '',
+        projectType: projectType || '',
+        capacity: capacity || '',
         message: message || '',
         source: source || '/',
         status: 'new',
@@ -639,7 +781,7 @@ app.post('/api/contact', async (req, res) => {
             from: `"DREDMARK Site" <${process.env.EMAIL_USER}>`,
             to: process.env.EMAIL_RECEIVER,
             subject: `Новая заявка: ${name || 'Без имени'}`,
-            text: `Имя: ${name}\nТелефон: ${tel}\nEmail: ${email || 'не указан'}\nИсточник: ${source}\nЯзык: ${lang}\n\nСообщение:\n${message}`
+            text: `Имя: ${name}\nТелефон: ${tel}\nEmail: ${email || 'не указан'}\nТип проекта: ${projectType || 'не указан'}\nПроизводительность: ${capacity || 'не указана'}\nИсточник: ${source}\nЯзык: ${lang}\n\nСообщение:\n${message}`
         };
         transporter.sendMail(adminMailOptions).catch(err => console.error('Admin Email Error:', err));
     }
@@ -647,7 +789,15 @@ app.post('/api/contact', async (req, res) => {
     res.status(200).json({ success: true });
 });
 
-bot.catch((err) => console.error('Bot Error:', err));
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error('SERVER ERROR:', err);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
+});
+
+bot.catch((err) => {
+    console.error('TELEGRAM BOT ERROR:', err);
+});
 bot.launch().then(() => console.log('✅ Dredmark CRM Dashboard Started'));
 app.listen(port, () => console.log(`Server running on port ${port}`));
 

@@ -98,16 +98,16 @@ const Header = () => {
 
         <ul ref={menuRef} className={`nav__list ${isOpen ? "open" : ""}`}>
           <NavLink to='/' className='link'>{t('navLink1')}</NavLink>
-          <NavLink to='/vozm' className='link'>{t('navLink2')}</NavLink>
+          <NavLink to='/products' className='link'>{t('navLink2')}</NavLink>
           <select onChange={handlePageChange} value={selectedPage} className="select1">
             <option value="" disabled hidden>{t("gallery")}</option>
             <option value="/video">{t("video")}</option>
             <option value="/img">{t("images")}</option>
           </select>
-          <NavLink to='/us' className='link'>{t('navLink4')}</NavLink>
-          <NavLink to='/us#fresh-projects' className='freshBtn'>{t('gM3FreshH2')}</NavLink>
+          <NavLink to='/about' className='link'>{t('navLink4')}</NavLink>
+          <NavLink to='/about#fresh-projects' className='freshBtn'>{t('gM3FreshH2')}</NavLink>
           <NavLink to='#forma' className='freshBtn'>{t('navLin10')}</NavLink>
-          {/* <NavLink to='/us#fresh-projects' className='freshBtn'></NavLink> */}
+          {/* <NavLink to='/about#fresh-projects' className='freshBtn'></NavLink> */}
           <NavLink to='/sertificates' className='link'>{t('navLink5')}</NavLink>
 
           {/* <select onChange={handleLanguageChange} value={selectedLang} className="select2">

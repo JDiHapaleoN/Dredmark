@@ -13,6 +13,7 @@ import Sert from './components/Serts/Sert'
 import NotFound from './components/NotFound/NotFound'
 import SEO from './components/SEO/SEO'
 import WhatsAppWidget from './components/WhatsAppWidget/WhatsAppWidget'
+import StickyContact from './components/StickyContact/StickyContact'
 
 function App() {
   //   git add .
@@ -27,8 +28,8 @@ function App() {
       <main className="main-content">
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/vozm' element={<Vozm />} />
-          <Route path='/us' element={<Us />} />
+          <Route path='/products' element={<Vozm />} />
+          <Route path='/about' element={<Us />} />
           <Route path='/sertificates' element={<Sert />} />
           <Route path='/video' element={<GMain2 />} />
           <Route path='/img' element={<GMain3 />} />
@@ -36,7 +37,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
-      <WhatsAppWidget />
+      <StickyContact />
     </Router>
   )
 }

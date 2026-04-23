@@ -67,6 +67,10 @@ import block7Img4 from '../../assets/images/gM3Block7Img4.jpg'
 import block7Img5 from '../../assets/images/gM3Block7Img5.jpg'
 import block7Img6 from '../../assets/images/gM3Block7Img6.jpg'
 import block7Img7 from '../../assets/images/gM3Block7Img7.jpg'
+import karshiImg from '../../assets/images/project2026_karshi.jpg'
+import karshiImg2 from '../../assets/images/project2026_karshi_2.jpg'
+import karshiImg3 from '../../assets/images/project2026_karshi_3.jpg'
+import karshiImg4 from '../../assets/images/project2026_karshi_4.jpg'
 
 
 import { Link } from "react-router-dom"
@@ -149,6 +153,12 @@ const imagesGm3Block7 = [
   block7Img6,
   block7Img7,
 
+];
+const imagesGm3Block8 = [
+  karshiImg,
+  karshiImg2,
+  karshiImg3,
+  karshiImg4,
 ];
 
 
@@ -250,6 +260,15 @@ const GMain3 = () => {
         <div className="gMain3__images">
           {imagesGm3Block7.map((img, index) => (
             <button key={index} onClick={() => openModalImg1Handler(index, imagesGm3Block7)}>
+              <img src={img} alt={`Image ${index + 1}`} className="gMain3__img1" />
+            </button>
+          ))}
+          <Link to='/us#fresh-projects' className="nav2__a">« {t('gM3FreshH2')}</Link>
+        </div>
+        <h2 id='gMainBox8' className="gMain3__h1">{t('gM3FreshH2026')}</h2>
+        <div className="gMain3__images">
+          {imagesGm3Block8.map((img, index) => (
+            <button key={index} onClick={() => openModalImg1Handler(index, imagesGm3Block8)}>
               <img src={img} alt={`Image ${index + 1}`} className="gMain3__img1" />
             </button>
           ))}

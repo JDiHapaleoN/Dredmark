@@ -12,11 +12,11 @@ const ProductTable = () => {
     const revealRef = useScrollReveal();
 
     const products = [
-        { img: tableImg1, title: t('homeTableText1'), perf: `2000 ${t('unitM')}3 ${t('homeTableText6')}`, depth: `10-13 ${t('unitM')}` },
-        { img: tableImg2, title: t('homeTableText2'), perf: `2500 ${t('unitM')}3 ${t('homeTableText6')}`, depth: `10-13 ${t('unitM')}` },
-        { img: tableImg3, title: t('homeTableText3'), perf: `3000 ${t('unitM')}3 ${t('homeTableText6')}`, depth: `10-13 ${t('unitM')}` },
-        { img: tableImg4, title: t('homeTableText4'), perf: `4000 ${t('unitM')}3 ${t('homeTableText6')}`, depth: `14 ${t('unitM')}` },
-        { img: tableImg5, title: t('homeTableText5'), perf: `4500 ${t('unitM')}3 ${t('homeTableText6')}`, depth: `14 ${t('unitM')}` },
+        { img: tableImg1, title: t('homeTableText1'), perf: `2000 ${t('unitM')}3 ${t('homeTableText6')}`, depth: `10-13 ${t('unitM')}`, price: t('homeTablePrice1') },
+        { img: tableImg2, title: t('homeTableText2'), perf: `2500 ${t('unitM')}3 ${t('homeTableText6')}`, depth: `10-13 ${t('unitM')}`, price: t('homeTablePrice2') },
+        { img: tableImg3, title: t('homeTableText3'), perf: `3000 ${t('unitM')}3 ${t('homeTableText6')}`, depth: `10-13 ${t('unitM')}`, price: t('homeTablePrice3') },
+        { img: tableImg4, title: t('homeTableText4'), perf: `4000 ${t('unitM')}3 ${t('homeTableText6')}`, depth: `14 ${t('unitM')}`, price: t('homeTablePrice4') },
+        { img: tableImg5, title: t('homeTableText5'), perf: `4500 ${t('unitM')}3 ${t('homeTableText6')}`, depth: `14 ${t('unitM')}`, price: t('homeTablePrice5') },
     ];
 
     return (
@@ -29,6 +29,7 @@ const ProductTable = () => {
                             <th>{t("vozmMainSection8P1")}</th>
                             <th>{t("homeTableTitle1")}</th>
                             <th>{t("homeTableTitle2")}</th>
+                            <th>{t("homeTableTitlePrice")}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,6 +41,7 @@ const ProductTable = () => {
                                 </td>
                                 <td>{p.perf}</td>
                                 <td>{p.depth}</td>
+                                <td style={{fontWeight: '700', color: '#00ff7f'}}>{p.price}</td>
                             </tr>
                         ))}
                     </tbody>

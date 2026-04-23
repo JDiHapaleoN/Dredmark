@@ -31,7 +31,7 @@ const StickyContact = () => {
                 <span> {t("fOnlineStatus")}</span>
             </div>
             <a
-                href={`https://wa.me/998998516074?text=${encodeURIComponent(t("whatsappMsg"))}`}
+                href={`https://wa.me/998974075793?text=${encodeURIComponent(t("whatsappMessage"))} ${window.location.href}`}
                 className="sticky-whatsapp"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -40,7 +40,7 @@ const StickyContact = () => {
             </a>
             <a href="#forma" className="sticky-contact">
                 <img src={emailIcon} alt="Contact" />
-                <span className="sticky-text">{t("navLin10")}</span>
+                <span className="sticky-text">{t("homeTableBtn")}</span>
             </a>
         </div>
     );

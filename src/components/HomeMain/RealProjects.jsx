@@ -80,6 +80,9 @@ const RealProjects = () => {
                                 {p.time && <p>{t('homeRealProjectText1')}: <span>{p.time}</span></p>}
                                 {p.desc && <p>{p.desc}</p>}
                                 {p.result && <p>{p.result}</p>}
+                                <a href="#forma" className="homeMain__table-btn" style={{ textDecoration: 'none', display: 'inline-block', marginTop: '15px', padding: '10px 20px', fontSize: '14px' }}>
+                                    {t('homeTableBtn')}
+                                </a>
                             </li>
                         </ul>
                     </div>

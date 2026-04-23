@@ -296,34 +296,59 @@ const UsMain = () => {
               </div>
             </div>
           </div>
-          <div id='fresh-projects' className="freshBlock">
-            <h2 className="usMain__h2">{t('usMainFreshH2')}</h2>
-            <div className="freshBlock__info">
-              <div className="table-wrapper">
-                <table className="freshBlock__info-table">
-                  <thead>
-                    <tr>
-                      <th><h3 className="freshBlock__info-title">{t('usMainFreshP1')}</h3></th>
-                      <th><h3 className="freshBlock__info-title">{t('usMainFreshP2')}</h3></th>
-                      <th>{t('usMainFreshP3')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{t('usMainFreshP4')}</td>
-                      <td>{t('usMainFreshP5')}</td>
-                      <td> <Link to="/img#gMainBox6" className="freshBlock__btn">{t('usMainFreshP3')} »</Link></td>
-                    </tr>
-                    <tr>
-                      <td>4000/65</td>
-                      <td>{t('usMainFreshP6')}</td>
-                      <td><Link to="/img#gMainBox7" className="freshBlock__btn">{t('usMainFreshP3')} »</Link></td>
-                    </tr>
-                  </tbody>
-                </table>
+          <div id='fresh-projects' className="freshBlockContainer">
+            <div className="freshBlock">
+              <h2 className="usMain__h2">{t('usMainFreshH2')}</h2>
+              <div className="freshBlock__info">
+                <div className="table-wrapper">
+                  <table className="freshBlock__info-table">
+                    <thead>
+                      <tr>
+                        <th><h3 className="freshBlock__info-title">{t('usMainFreshP1')}</h3></th>
+                        <th><h3 className="freshBlock__info-title">{t('usMainFreshP2')}</h3></th>
+                        <th>{t('usMainFreshP3')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{t('usMainFreshP4')}</td>
+                        <td>{t('usMainFreshP5')}</td>
+                        <td> <Link to="/img#gMainBox6" className="freshBlock__btn">{t('usMainFreshP3')} »</Link></td>
+                      </tr>
+                      <tr>
+                        <td>4000/65</td>
+                        <td>{t('usMainFreshP6')}</td>
+                        <td><Link to="/img#gMainBox7" className="freshBlock__btn">{t('usMainFreshP3')} »</Link></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+            <div className="freshBlock">
+              <h2 className="usMain__h2">{t('usMainFreshH3')}</h2>
+              <div className="freshBlock__info">
+                <div className="table-wrapper">
+                  <table className="freshBlock__info-table">
+                    <thead>
+                      <tr>
+                        <th><h3 className="freshBlock__info-title">{t('usMainFreshP1')}</h3></th>
+                        <th><h3 className="freshBlock__info-title">{t('usMainFreshP2')}</h3></th>
+                        <th>{t('usMainFreshP3')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{t('usMainFreshP8')}</td>
+                        <td>{t('usMainFreshP9')}</td>
+                        <td> <Link to="/img#gMainBox8" className="freshBlock__btn">{t('usMainFreshP3')} »</Link></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-
           </div>
           <div className="about-seo-info">
             <h3>{t('seoText6')}</h3>

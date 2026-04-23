@@ -70,9 +70,9 @@ const ProductCategories = ({
 
     return (
         <div className="container reveal" ref={revealRef}>
-            <h3 className="homeMain__box3-h3" id="vozmBlocksBack">
+            <h2 className="homeMain__h2" id="vozmBlocksBack">
                 {t("homeText4")}
-            </h3>
+            </h2>
             <div className="homeMain__box3">
                 {categories.map((cat, i) => (
                     <div className="homeMain__box3-card2" key={i}>
