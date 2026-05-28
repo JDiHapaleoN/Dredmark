@@ -14,6 +14,7 @@ import NotFound from './components/NotFound/NotFound'
 import SEO from './components/SEO/SEO'
 import WhatsAppWidget from './components/WhatsAppWidget/WhatsAppWidget'
 import StickyContact from './components/StickyContact/StickyContact'
+import Articles from './pages/Articles'
 
 function App() {
   //   git add .
@@ -33,6 +34,8 @@ function App() {
           <Route path='/sertificates' element={<Sert />} />
           <Route path='/video' element={<GMain2 />} />
           <Route path='/img' element={<GMain3 />} />
+          <Route path='/technology' element={<Articles />} />
+          <Route path='/technology/:id' element={<Articles />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </main>

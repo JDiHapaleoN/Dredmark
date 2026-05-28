@@ -105,6 +105,7 @@ const Header = () => {
             <option value="/img">{t("images")}</option>
           </select>
           <NavLink to='/about' className='link'>{t('navLink4')}</NavLink>
+          <NavLink to='/technology' className='link'>{t('navLink3')}</NavLink>
           <NavLink to='/about#fresh-projects' className='freshBtn'>{t('gM3FreshH2')}</NavLink>
           <NavLink to='#forma' className='freshBtn'>{t('navLin10')}</NavLink>
           {/* <NavLink to='/about#fresh-projects' className='freshBtn'></NavLink> */}

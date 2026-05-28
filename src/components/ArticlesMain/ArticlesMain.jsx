@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
 import './ArticlesMain.scss';
 import ContactForm from '../ContactForm/ContactForm';
+import SEO from '../Common/SEO';
 
 const ArticlesMain = () => {
     const { t } = useTranslation();
@@ -35,17 +36,30 @@ const ArticlesMain = () => {
     if (id && !article) {
         return (
             <div className="container" style={{padding: '100px 0', textAlign: 'center'}}>
-                <h1>Статья не найдена</h1>
-                <Link to="/knowledge-base" className="button1">Вернуться в базу знаний</Link>
+                <h1>{t('artNotFound', 'Статья не найдена')}</h1>
+                <Link to="/technology" className="button1">{t('artBackToTech')}</Link>
             </div>
         );
     }
 
     return (
         <div className="articles-main">
+            {id ? (
+                <SEO 
+                    title={article.title} 
+                    description={id === 'choosing-dredger' ? t('art1Desc') : t('art2Desc')} 
+                    url={`/technology/${id}`} 
+                />
+            ) : (
+                <SEO 
+                    title={t("artMainTitle")} 
+                    description={t("seoDescArticles", "Полезные статьи и технические руководства о земснарядах, дноуглублении и расчете производительности от завода DREDMARK.")} 
+                    url="/technology" 
+                />
+            )}
             <div className="nav2">
                 <Link to="/" className='nav2__a'>{t('vozmMainNav2Text1')}</Link>
-                <Link to="/knowledge-base" className='nav2__a'> » {t('artMainTitle')}</Link>
+                <Link to="/technology" className='nav2__a'> » {t('artMainTitle')}</Link>
                 {id && <p className='nav2__p'> » {article.title}</p>}
             </div>
 
@@ -55,7 +69,7 @@ const ArticlesMain = () => {
                         <h1 className="articles-main__h1">{t("artMainTitle")}</h1>
                         <div className="articles-grid">
                             {Object.keys(content).map(key => (
-                                <Link to={`/knowledge-base/${key}`} key={key} className="article-card">
+                                <Link to={`/technology/${key}`} key={key} className="article-card">
                                     <h3>{content[key].title}</h3>
                                     <p>{content[key].text[0].substring(0, 150)}...</p>
                                     <span className="read-more">{t("artReadMore")} →</span>

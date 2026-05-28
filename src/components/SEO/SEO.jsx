@@ -24,6 +24,9 @@ const SEO = () => {
         } else if (pathname.includes('/video') || pathname.includes('/img')) {
             titleKey = 'seoTitleGallery';
             descKey = 'seoDescGallery';
+        } else if (pathname.includes('/technology')) {
+            titleKey = 'artMainTitle';
+            descKey = 'seoDescArticles';
         }
 
         // Update Title
