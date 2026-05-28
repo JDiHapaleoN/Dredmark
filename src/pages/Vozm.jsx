@@ -10,7 +10,7 @@ const Vozm = () => {
       <SEO
         title={t("seoTitleVozm")}
         description={t("seoDescVozm")}
-        url="/vozm"
+        url="/products"
       />
       <BannerVozm />
       <VozmMain />

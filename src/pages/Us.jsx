@@ -9,7 +9,7 @@ const Us = () => {
       <SEO
         title={t("seoTitleUs")}
         description={t("seoDescUs")}
-        url="/us"
+        url="/about"
       />
       <UsMain />
     </>

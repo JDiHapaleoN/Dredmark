@@ -27,6 +27,11 @@ const MainBanner = () => {
           <button onClick={() => {document.getElementById('forma')?.scrollIntoView({ behavior: 'smooth' })}} className="button1" style={{ margin: '0', background: 'rgba(0, 168, 255, 0.2)', borderColor: 'rgba(0, 168, 255, 0.6)' }}>{t('homeBannersCatalog')}</button>
           <button onClick={() => window.open('https://wa.me/998974075793', '_blank')} className="button1" style={{ margin: '0', background: 'rgba(37, 211, 102, 0.2)', borderColor: 'rgba(37, 211, 102, 0.6)' }}>WhatsApp</button>
         </div>
+        <div className="banner__factory-badge">
+          <span className="banner__factory-location">📍 {t('bannerFactory', 'Собственное производство: Ташкент, Узбекистан')}</span>
+          <span className="banner__factory-divider">|</span>
+          <a href="https://dredmarkmaster.com" target="_blank" rel="noopener noreferrer" className="banner__factory-link">dredmarkmaster.com</a>
+        </div>
         {isModalOpen && <Modal closeModal={closeModalHandler} />}
       </div>
     </div>

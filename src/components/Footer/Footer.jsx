@@ -11,7 +11,7 @@ const Footer = () => {
     <footer className="footer" id="footer">
       <div className="container">
         <div className="footer__infomain">
-          <h1>DREDMARK GROUP</h1>
+          <div className="footer__main-title">DREDMARK GROUP</div>
           <h3>ООО DREDGER</h3>
           <p>{t("fAddress")}</p>
           <div className="footer__infomain-block">
@@ -75,10 +75,22 @@ const Footer = () => {
               </a>
             </div> */}
           </div>
+          {/* TODO: Replace with corporate email when available */}
           <a href="mailto:dredmark.websites@gmail.com" className="linkInst">
             {/* <img src={email} alt="" /> */}
             dredmark.websites@gmail.com
           </a>
+          <div className="footer__sites">
+            <h3 className="footer__sites-title">{t("fSitesTitle", "Наши сайты")}</h3>
+            <div className="footer__sites-links">
+              <a href="https://dredmark.com" target="_blank" rel="noopener noreferrer" className="footer__sites-link">
+                🌐 dredmark.com
+              </a>
+              <a href="https://dredmarkmaster.com" target="_blank" rel="noopener noreferrer" className="footer__sites-link">
+                🌐 dredmarkmaster.com
+              </a>
+            </div>
+          </div>
           <div className="footer__infomain-box3">
             <h3 className="footer__infomain-box3-h3-1">{t("fP6")}</h3>
             <div className="footer__infomain-box3-comanies">

@@ -181,11 +181,17 @@
       margin-top: 0;
     }
 
-    .container {
-      display: grid;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    .case-studies {
+      display: flex;
+      flex-direction: column;
       gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .realprojects-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
 
       @include media(480) {
         grid-template-columns: 1fr;
@@ -194,7 +200,7 @@
 
     &-project1 {
       position: relative;
-      height: 400px;
+      height: 350px;
       border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -232,7 +238,7 @@
         transition: all 0.4s ease;
 
         h3 {
-          font-size: 24px;
+          font-size: 22px;
           color: var(--primary-light);
           margin-bottom: 10px;
 
