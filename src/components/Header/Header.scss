@@ -19,7 +19,7 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: 0 20px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Prevent wrapping on desktop */
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
   @include media(1250) {
@@ -27,7 +27,7 @@
     padding: 0 15px;
   }
 
-  @include media(930) {
+  @include media(1150) {
     justify-content: space-between;
     padding: 10px 15px;
   }
@@ -36,14 +36,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Keep on a single line */
     gap: 10px;
 
     @include media(1250) {
       justify-content: center;
+      gap: 5px; /* Reduced gap on medium screens */
     }
 
-    @include media(930) {
+    @include media(1150) {
       display: flex;
       position: fixed;
       top: 0;
@@ -56,7 +57,7 @@
       width: 75%;
       max-width: 320px;
       height: 100vh;
-      background: rgba(3, 1, 37, 0.85);
+      background: rgba(3, 1, 37, 0.95);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       z-index: 1005;
@@ -69,8 +70,8 @@
 
     .link {
       font-weight: 500;
-      font-size: 16px;
-      padding: 20px 22px;
+      font-size: 15px;
+      padding: 14px 16px;
       text-align: center;
       color: rgba(255, 255, 255, 0.9);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -82,7 +83,7 @@
       &::after {
         content: '';
         position: absolute;
-        bottom: 12px;
+        bottom: 6px;
         left: 50%;
         width: 0;
         height: 2px;
@@ -93,9 +94,9 @@
         box-shadow: 0 0 10px rgba(0, 168, 255, 0);
       }
 
-      @include media(1250) {
-        padding: 15px 15px;
-        font-size: 15px;
+      @include media(1300) {
+        padding: 12px 8px; /* Reduced padding on medium screens to prevent wrapping */
+        font-size: 13.5px;
       }
 
       @include media(670) {
@@ -126,23 +127,27 @@
     }
 
     .link__a {
-      font-weight: 400;
-      font-size: 18px;
-      padding: 23px 25px;
+      font-weight: 500;
+      font-size: 15px;
+      padding: 10px 18px;
       text-align: center;
       color: white;
       transition: 0.3s;
+      border-radius: 8px;
       background: rgba(0, 30, 96, 0.632);
+      border: 1px solid rgba(0, 168, 255, 0.3);
 
       &:hover {
         background: rgb(44, 0, 131);
+        border-color: #00a8ff;
       }
 
       @include media(1250) {
-        padding: 10px 10px;
+        padding: 8px 10px;
+        font-size: 13.5px;
       }
 
-      @include media(930) {
+      @include media(1150) {
         margin-top: 20px;
         width: 100%;
         border-radius: 12px;
@@ -159,8 +164,8 @@
       /* ближе к белому */
       --radii: 0.5em;
       cursor: pointer;
-      padding: 0.9em 1.4em;
-      font-size: var(--size, 1rem);
+      padding: 8px 16px;
+      font-size: var(--size, 14px);
       font-weight: 500;
       transition: 0.8s;
       background-size: 280% auto;
@@ -171,10 +176,15 @@
       border: none;
       border-radius: var(--radii);
       color: var(--btn-bg-color);
-      box-shadow: 0px 0px 20px rgba(50, 150, 210, 0.4),
-        0px 5px 5px -1px rgba(40, 100, 180, 0.25),
-        inset 4px 4px 8px rgba(130, 200, 240, 0.4),
-        inset -4px -4px 8px rgba(20, 80, 190, 0.3);
+      box-shadow: 0px 0px 15px rgba(50, 150, 210, 0.3),
+        0px 5px 5px -1px rgba(40, 100, 180, 0.2),
+        inset 4px 4px 8px rgba(130, 200, 240, 0.3),
+        inset -4px -4px 8px rgba(20, 80, 190, 0.2);
+
+      @include media(1300) {
+        padding: 6px 12px;
+        font-size: 13px;
+      }
 
       @include media(430) {
         padding: 7px;
@@ -212,7 +222,7 @@
       text-shadow: 0 4px 20px rgba(0, 150, 255, 0.5);
     }
 
-    @include media(930) {
+    @include media(1150) {
       font-size: 24px;
       padding: 10px;
       padding-left: 10px;
@@ -225,28 +235,25 @@
 }
 
 .select1 {
-  // display: flex;
   appearance: none;
-  /* Убираем стандартный стиль */
   -webkit-appearance: none;
   -moz-appearance: none;
-  // background-repeat: no-repeat;
-  // background-position: right -8px center; /* Подвигаем стрелку ближе */
-  // background-size: 12px;
 
-  font-weight: 400;
-  font-size: 18px;
-  padding: 25px 0;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 14px 10px;
   text-align: center;
   color: white;
   transition: 0.3s;
   background: none;
   max-width: 120px;
   display: inline-block;
+  border: none;
+  cursor: pointer;
 
-  @include media(1250) {
-    padding: 15px 10px;
-    font-size: 16px;
+  @include media(1300) {
+    padding: 12px 5px;
+    font-size: 13.5px;
     text-align: left;
   }
 
@@ -314,7 +321,7 @@
       left: 10px;
     }
 
-    @include media(930) {
+    @include media(1150) {
       position: relative;
       top: auto;
       left: auto;
@@ -432,7 +439,7 @@
     }
   }
 
-  @include media(930) {
+  @include media(1150) {
     display: flex;
   }
 }
