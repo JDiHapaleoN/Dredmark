@@ -99,22 +99,7 @@ const ContactForm = () => {
                             onChange={handleChange}
                         />
                     </div>
-                    <div className="form-row">
-                        <select name="projectType" value={formData.projectType} onChange={handleChange} className="contactSelect">
-                            <option value="">{t("fProjectType", "Тип проекта (опционально)")}</option>
-                            <option value="sand">{t("fSand", "Добыча песка")}</option>
-                            <option value="dredging">{t("fDredging", "Дноуглубление")}</option>
-                            <option value="cleaning">{t("fCleaning", "Очистка водоёмов")}</option>
-                            <option value="other">{t("fOther", "Другое")}</option>
-                        </select>
-                        <select name="capacity" value={formData.capacity} onChange={handleChange} className="contactSelect">
-                            <option value="">{t("fCapacity", "Требуемая производительность")}</option>
-                            <option value="1000">до 1000 м³/ч</option>
-                            <option value="2500">1000-2500 м³/ч</option>
-                            <option value="4000">2500-4000 м³/ч</option>
-                            <option value="4000+">4000+ м³/ч</option>
-                        </select>
-                    </div>
+
                     <input
                         type="text"
                         name="tel"
