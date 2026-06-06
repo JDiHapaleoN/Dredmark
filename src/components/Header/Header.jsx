@@ -9,6 +9,7 @@ import email from '../../assets/images/email.svg'
 const Header = () => {
   const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   // Управление состоянием языка
   const [selectedLang, setSelectedLang] = useState(i18n.language);
