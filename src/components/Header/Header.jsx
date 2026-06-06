@@ -80,16 +80,18 @@ const Header = () => {
     <header className="header">
       <nav className="nav">
 
-        <div className="lng-wrapper">
-          <button type='submit' onClick={() => setOpenLng(!openLng)} className="lng-button"><img src={language} alt="" /></button>
-          {openLng ?
-            <ul className={`lng-list ${openLng ? 'open' : ''}`}>
-              <li><button className="lng-item" onClick={() => handleLanguageChange('ru')}>Ru</button></li>
-              <li><button className="lng-item" onClick={() => handleLanguageChange('en')}>En</button></li>
-              <li><button className="lng-item" onClick={() => handleLanguageChange('uz')}>Uz</button></li>
-            </ul> : ''}
+        <div className="logo-container">
+          <div className="lng-wrapper">
+            <button type='submit' onClick={() => setOpenLng(!openLng)} className="lng-button"><img src={language} alt="" /></button>
+            {openLng ?
+              <ul className={`lng-list ${openLng ? 'open' : ''}`}>
+                <li><button className="lng-item" onClick={() => handleLanguageChange('ru')}>Ru</button></li>
+                <li><button className="lng-item" onClick={() => handleLanguageChange('en')}>En</button></li>
+                <li><button className="lng-item" onClick={() => handleLanguageChange('uz')}>Uz</button></li>
+              </ul> : ''}
+          </div>
+          <NavLink to='/' className='logo'>DREDMARK</NavLink>
         </div>
-        <NavLink to='/' className='logo'>DREDMARK</NavLink>
         <div ref={burgerRef} className={`burger ${isOpen ? "open" : ""}`} onClick={() => setIsOpen(!isOpen)}>
           <div className="burger__line"></div>
           <div className="burger__line"></div>
