@@ -7,6 +7,7 @@ import whatsappIcon from '../../assets/images/whatsapp.svg';
 const StickyContact = () => {
     const { t } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
+    const [currentUrl, setCurrentUrl] = useState('https://dredmark.com');
 
     useEffect(() => {
         const handleScroll = () => {
@@ -19,6 +20,8 @@ const StickyContact = () => {
         };
 
         window.addEventListener('scroll', handleScroll);
+        setCurrentUrl(window.location.href);
+
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -31,7 +34,7 @@ const StickyContact = () => {
                 <span> {t("fOnlineStatus")}</span>
             </div>
             <a
-                href={`https://wa.me/998974075793?text=${encodeURIComponent(t("whatsappMessage"))} ${window.location.href}`}
+                href={`https://wa.me/998974075793?text=${encodeURIComponent(t("whatsappMessage"))} ${currentUrl}`}
                 className="sticky-whatsapp"
                 target="_blank"
                 rel="noopener noreferrer"

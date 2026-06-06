@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 
 import Header from './components/Header/Header'
 import Home from './pages/Home'
@@ -11,7 +11,7 @@ import GMain3 from './components/GaleryMain/GMain3'
 import './i18n'
 import Sert from './components/Serts/Sert'
 import NotFound from './components/NotFound/NotFound'
-import SEO from './components/SEO/SEO'
+
 import WhatsAppWidget from './components/WhatsAppWidget/WhatsAppWidget'
 import StickyContact from './components/StickyContact/StickyContact'
 import Articles from './pages/Articles'
@@ -22,9 +22,8 @@ function App() {
   //   git push -u origin master
   return (
 
-    <Router>
+    <>
       <ScrollToElement />
-      <SEO />
       <Header />
       <main className="main-content">
         <Routes>
@@ -41,7 +40,7 @@ function App() {
       </main>
       <Footer />
       <StickyContact />
-    </Router>
+    </>
   )
 }
 

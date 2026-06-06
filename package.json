@@ -7,7 +7,7 @@
     "dev": "vite",
     "server": "cd server && node index.js",
     "dev:full": "npm run dev & npm run server",
-    "build": "vite build",
+    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist/server && node prerender.js",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
