@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import burger from '../../assets/images/burger.svg';
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "../../i18n";
@@ -8,7 +8,7 @@ import email from '../../assets/images/email.svg'
 
 const Header = () => {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   // Управление состоянием языка
   const [selectedLang, setSelectedLang] = useState(i18n.language);
@@ -21,24 +21,43 @@ const Header = () => {
   // Управление навигацией через select
   const [selectedPage, setSelectedPage] = useState("");
 
+  const getLocPath = (path) => {
+    if (i18n.language === 'ru') return path;
+    if (path.startsWith('#')) return path;
+    if (path.includes('#')) {
+      const [p, hash] = path.split('#');
+      return `/${i18n.language}${p === '/' ? '' : p}#${hash}`;
+    }
+    return `/${i18n.language}${path === '/' ? '' : path}`;
+  };
+
   const handlePageChange = (event) => {
     const value = event.target.value;
     setSelectedPage(""); // Сброс после навигации
     if (value !== "") {
-      navigate(value);
+      navigate(getLocPath(value));
     }
   };
 
   // Обработчик смены языка
-  // const handleLanguageChange = (event) => {
-  //   const newLang = event.target.value;
-  //   setSelectedLang(newLang);
-  //   changeLanguage(newLang);
-  // };
   const handleLanguageChange = (newLang) => {
     setSelectedLang(newLang);
     changeLanguage(newLang);
-    setOpenLng(false)
+    setOpenLng(false);
+
+    // Redirect to the correct language route path
+    let cleanPath = pathname;
+    if (pathname.startsWith('/en')) {
+      cleanPath = pathname.substring(3) || '/';
+    } else if (pathname.startsWith('/uz')) {
+      cleanPath = pathname.substring(3) || '/';
+    }
+
+    if (newLang === 'ru') {
+      navigate(cleanPath || '/');
+    } else {
+      navigate(`/${newLang}${cleanPath === '/' ? '' : cleanPath}`);
+    }
   };
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null)
@@ -82,7 +101,10 @@ const Header = () => {
 
         <div className="logo-container">
           <div className="lng-wrapper">
-            <button type='submit' onClick={() => setOpenLng(!openLng)} className="lng-button"><img src={language} alt="" /></button>
+            <button type='submit' onClick={() => setOpenLng(!openLng)} className="lng-button">
+              <img src={language} alt="" />
+              <span className="lng-current">{selectedLang.toUpperCase()} ▾</span>
+            </button>
             {openLng ?
               <ul className={`lng-list ${openLng ? 'open' : ''}`}>
                 <li><button className="lng-item" onClick={() => handleLanguageChange('ru')}>Ru</button></li>
@@ -90,7 +112,7 @@ const Header = () => {
                 <li><button className="lng-item" onClick={() => handleLanguageChange('uz')}>Uz</button></li>
               </ul> : ''}
           </div>
-          <NavLink to='/' className='logo'>DREDMARK</NavLink>
+          <NavLink to={getLocPath('/')} className='logo'>DREDMARK</NavLink>
         </div>
         <div ref={burgerRef} className={`burger ${isOpen ? "open" : ""}`} onClick={() => setIsOpen(!isOpen)}>
           <div className="burger__line"></div>
@@ -99,19 +121,19 @@ const Header = () => {
         </div>
 
         <ul ref={menuRef} className={`nav__list ${isOpen ? "open" : ""}`}>
-          <NavLink to='/' className='link'>{t('navLink1')}</NavLink>
-          <NavLink to='/products' className='link'>{t('navLink2')}</NavLink>
+          <NavLink to={getLocPath('/')} className='link'>{t('navLink1')}</NavLink>
+          <NavLink to={getLocPath('/products')} className='link'>{t('navLink2')}</NavLink>
           <select onChange={handlePageChange} value={selectedPage} className="select1">
             <option value="" disabled hidden>{t("gallery")}</option>
             <option value="/video">{t("video")}</option>
             <option value="/img">{t("images")}</option>
           </select>
-          <NavLink to='/about' className='link'>{t('navLink4')}</NavLink>
-          <NavLink to='/technology' className='link'>{t('navLink3')}</NavLink>
-          <NavLink to='/about#fresh-projects' className='freshBtn'>{t('gM3FreshH2')}</NavLink>
-          <NavLink to='#forma' className='freshBtn'>{t('navLin10')}</NavLink>
+          <NavLink to={getLocPath('/about')} className='link'>{t('navLink4')}</NavLink>
+          <NavLink to={getLocPath('/technology')} className='link'>{t('navLink3')}</NavLink>
+          <NavLink to={getLocPath('/about#fresh-projects')} className='freshBtn'>{t('gM3FreshH2')}</NavLink>
+          <NavLink to={getLocPath('#forma')} className='freshBtn'>{t('navLin10')}</NavLink>
           {/* <NavLink to='/about#fresh-projects' className='freshBtn'></NavLink> */}
-          <NavLink to='/sertificates' className='link'>{t('navLink5')}</NavLink>
+          <NavLink to={getLocPath('/sertificates')} className='link'>{t('navLink5')}</NavLink>
 
           {/* <select onChange={handleLanguageChange} value={selectedLang} className="select2">
             <option value="ru">Ru</option>
@@ -120,7 +142,7 @@ const Header = () => {
           </select> */}
 
 
-          <NavLink to="#footer" className='link__a'>{t("navLink7")}</NavLink>
+          <NavLink to={getLocPath('#footer')} className='link__a'>{t("navLink7")}</NavLink>
 
         </ul>
       </nav>

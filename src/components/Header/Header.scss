@@ -330,28 +330,40 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 4px;
+    padding: 6px 10px;
     border-radius: 8px;
     transition: background 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 6px;
+    color: white;
 
     &:hover {
       background: rgba(255, 255, 255, 0.08);
     }
 
     & img {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       opacity: 0.85;
       transition: all 0.25s ease;
-
-      &:hover {
-        opacity: 1;
-        transform: scale(1.08);
-      }
     }
+
+    &:hover img {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+
+  &-current {
+    font-weight: 500;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
   }
 
   &-list {

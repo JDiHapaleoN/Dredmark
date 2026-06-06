@@ -6,8 +6,9 @@ const SEO = ({ title, description, keywords, image, url, type = "website" }) => 
     const { i18n } = useTranslation();
     const currentLang = i18n.language;
     const siteName = "DREDMARK";
-    const baseUrl = "https://dredmark.com"; // Change to actual production URL
-    const canonicalUrl = `${baseUrl}${url || ""}`;
+    const baseUrl = "https://dredmark.com";
+    const langPrefix = currentLang === 'ru' ? '' : `/${currentLang}`;
+    const canonicalUrl = `${baseUrl}${langPrefix}${url || ""}`;
     const defaultImage = `${baseUrl}/favicon.png`;
     const imageUrl = image || defaultImage;
 
@@ -39,8 +40,8 @@ const SEO = ({ title, description, keywords, image, url, type = "website" }) => 
             {/* hreflang for Multilingual SEO */}
             <link rel="alternate" href={`${baseUrl}${url || ""}`} hreflang="x-default" />
             <link rel="alternate" href={`${baseUrl}${url || ""}`} hreflang="ru" />
-            <link rel="alternate" href={`${baseUrl}${url || ""}`} hreflang="en" />
-            <link rel="alternate" href={`${baseUrl}${url || ""}`} hreflang="uz" />
+            <link rel="alternate" href={`${baseUrl}/en${url || ""}`} hreflang="en" />
+            <link rel="alternate" href={`${baseUrl}/uz${url || ""}`} hreflang="uz" />
 
             {/* Canonical */}
             <link rel="canonical" href={canonicalUrl} />

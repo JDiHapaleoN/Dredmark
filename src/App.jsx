@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import Header from './components/Header/Header'
 import Home from './pages/Home'
@@ -17,16 +18,45 @@ import StickyContact from './components/StickyContact/StickyContact'
 import Articles from './pages/Articles'
 
 function App() {
-  //   git add .
-  //   git commit -m ""
-  //   git push -u origin master
-  return (
+  const { i18n } = useTranslation();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    // Detect language prefix from route path
+    let pathLang = 'ru';
+    let cleanPath = pathname;
+    if (pathname.startsWith('/en')) {
+      pathLang = 'en';
+      cleanPath = pathname.substring(3) || '/';
+    } else if (pathname.startsWith('/uz')) {
+      pathLang = 'uz';
+      cleanPath = pathname.substring(3) || '/';
+    }
+
+    const currentI18nLang = i18n.language;
+
+    // If path lang matches active language state, do nothing
+    if (pathLang === currentI18nLang) {
+      return;
+    }
+
+    // Auto-redirect if URL doesn't have lang prefix but active language state is non-Russian
+    if (pathLang === 'ru' && currentI18nLang !== 'ru') {
+      navigate(`/${currentI18nLang}${cleanPath === '/' ? '' : cleanPath}`, { replace: true });
+    } else {
+      // User directly visited a language route, update active translation context
+      i18n.changeLanguage(pathLang);
+    }
+  }, [pathname, i18n.language, navigate]);
+
+  return (
     <>
       <ScrollToElement />
       <Header />
       <main className="main-content">
         <Routes>
+          {/* Default Paths (Russian) */}
           <Route path='/' element={<Home />} />
           <Route path='/products' element={<Vozm />} />
           <Route path='/about' element={<Us />} />
@@ -35,6 +65,31 @@ function App() {
           <Route path='/img' element={<GMain3 />} />
           <Route path='/technology' element={<Articles />} />
           <Route path='/technology/:id' element={<Articles />} />
+
+          {/* English Paths */}
+          <Route path='/en'>
+            <Route index element={<Home />} />
+            <Route path='products' element={<Vozm />} />
+            <Route path='about' element={<Us />} />
+            <Route path='sertificates' element={<Sert />} />
+            <Route path='video' element={<GMain2 />} />
+            <Route path='img' element={<GMain3 />} />
+            <Route path='technology' element={<Articles />} />
+            <Route path='technology/:id' element={<Articles />} />
+          </Route>
+
+          {/* Uzbek Paths */}
+          <Route path='/uz'>
+            <Route index element={<Home />} />
+            <Route path='products' element={<Vozm />} />
+            <Route path='about' element={<Us />} />
+            <Route path='sertificates' element={<Sert />} />
+            <Route path='video' element={<GMain2 />} />
+            <Route path='img' element={<GMain3 />} />
+            <Route path='technology' element={<Articles />} />
+            <Route path='technology/:id' element={<Articles />} />
+          </Route>
+
           <Route path='*' element={<NotFound />} />
         </Routes>
       </main>
