@@ -35,6 +35,7 @@ const SEO = ({ title, description, keywords, image, url, type = "website" }) => 
             <title>{title ? `${title} | ${siteName}` : siteName}</title>
             {description && <meta name="description" content={description} />}
             {keywords && <meta name="keywords" content={keywords} />}
+            <meta name="google-site-verification" content="2OMX8YakdumVpamnfw9mDOL2geIfBY_sfCn74uBMfa0" />
             <html lang={currentLang} />
 
             {/* hreflang for Multilingual SEO */}
