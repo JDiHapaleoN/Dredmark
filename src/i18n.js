@@ -1424,6 +1424,8 @@ i18n
   .init({
     resources,
     fallbackLng: "ru",
+    supportedLngs: ["ru", "en", "uz"],
+    load: "languageOnly",
     detection: {
       order: ["localStorage", "navigator"],
       caches: ["localStorage"],

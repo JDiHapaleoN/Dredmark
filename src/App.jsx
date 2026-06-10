@@ -34,16 +34,18 @@ function App() {
       cleanPath = pathname.substring(3) || '/';
     }
 
-    const currentI18nLang = i18n.language;
+    const supportedLangs = ['ru', 'en', 'uz'];
+    const currentI18nLang = (i18n.language || 'ru').split('-')[0].toLowerCase();
+    const activeLang = supportedLangs.includes(currentI18nLang) ? currentI18nLang : 'ru';
 
     // If path lang matches active language state, do nothing
-    if (pathLang === currentI18nLang) {
+    if (pathLang === activeLang) {
       return;
     }
 
     // Auto-redirect if URL doesn't have lang prefix but active language state is non-Russian
-    if (pathLang === 'ru' && currentI18nLang !== 'ru') {
-      navigate(`/${currentI18nLang}${cleanPath === '/' ? '' : cleanPath}`, { replace: true });
+    if (pathLang === 'ru' && activeLang !== 'ru') {
+      navigate(`/${activeLang}${cleanPath === '/' ? '' : cleanPath}`, { replace: true });
     } else {
       // User directly visited a language route, update active translation context
       i18n.changeLanguage(pathLang);
