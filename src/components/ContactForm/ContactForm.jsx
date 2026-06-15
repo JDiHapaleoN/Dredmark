@@ -52,7 +52,16 @@ const ContactForm = () => {
                 showToast(t("toastSuccess"), "success");
                 setFormData({ name: "", tel: "", email: "", projectType: "", capacity: "", message: "" });
             } else {
-                showToast(t("toastError"), "error");
+                try {
+                    const data = await response.json();
+                    if (data && data.error) {
+                        showToast(data.error, "error");
+                    } else {
+                        showToast(t("toastError"), "error");
+                    }
+                } catch (jsonErr) {
+                    showToast(t("toastError"), "error");
+                }
             }
         } catch (error) {
             console.error('Submission error:', error);

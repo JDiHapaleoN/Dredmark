@@ -11,7 +11,12 @@ const archiver = require('archiver');
 const si = require('systeminformation');
 
 const app = express();
+app.set('trust proxy', true);
 const port = process.env.PORT || 5001;
+
+// Anti-spam in-memory storage
+const ipLockdowns = new Map(); // ip -> expiryTimestamp
+const ipRequestHistory = new Map(); // ip -> array of timestamps
 
 // Database (Simple JSON file)
 const MESSAGES_FILE = path.join(__dirname, 'messages.json');
@@ -212,9 +217,15 @@ bot.hears('📑 Список заявок', isAdmin, (ctx) => {
         Markup.button.callback('✅ Готово', 'filter_completed')
     ];
 
+    const finalKeyboard = [
+        filterButtons,
+        ...buttons,
+        [Markup.button.callback('🚨 Удалить ВСЕ заявки', 'delete_all_confirm')]
+    ];
+
     ctx.reply(`📂 *ПОСЛЕДНИЕ ЗАЯВКИ* [${items.length}]\n───────────────────\nНажмите на заявку для просмотра деталей:`, {
         parse_mode: 'Markdown',
-        ...Markup.inlineKeyboard([filterButtons, ...buttons])
+        ...Markup.inlineKeyboard(finalKeyboard)
     });
 });
 
@@ -250,9 +261,18 @@ bot.action(/filter_(.+)/, isAdmin, (ctx) => {
         Markup.button.callback('✅ Готово', 'filter_completed')
     ];
 
+    const finalKeyboard = [
+        filterButtons,
+        ...buttons
+    ];
+
+    if (filter === 'all' && messages.length > 0) {
+        finalKeyboard.push([Markup.button.callback('🚨 Удалить ВСЕ заявки', 'delete_all_confirm')]);
+    }
+
     ctx.editMessageText(`📂 *${filterLabel.toUpperCase()}* [${items.length}]\n───────────────────\nНажмите на заявку для просмотра деталей:`, {
         parse_mode: 'Markdown',
-        ...Markup.inlineKeyboard([filterButtons, ...buttons])
+        ...Markup.inlineKeyboard(finalKeyboard)
     });
     ctx.answerCbQuery();
 });
@@ -567,16 +587,57 @@ bot.action(/template_(.+)_(.+)/, isAdmin, async (ctx) => {
 
 bot.action('back_to_list', isAdmin, (ctx) => {
     const messages = loadData(MESSAGES_FILE);
+    if (messages.length === 0) {
+        ctx.editMessageText('📭 *Список заявок пока пуст.*', { parse_mode: 'Markdown' });
+        return ctx.answerCbQuery();
+    }
     const limit = 25;
     const items = messages.slice(-limit).reverse();
     const buttons = items.map(msg => [
         Markup.button.callback(`${statusIcons[msg.status || 'new']} ${msg.name} | ${msg.date.split(',')[0]}`, `view_${msg.id}`)
     ]);
-    ctx.editMessageText(`📂 *ПОСЛЕДНИЕ ЗАЯВКИ*\n───────────────────\nВыберите клиента:`, {
+
+    const filterButtons = [
+        Markup.button.callback('Все', 'filter_all'),
+        Markup.button.callback('🆕 Новые', 'filter_new'),
+        Markup.button.callback('⏳ В работе', 'filter_processing'),
+        Markup.button.callback('✅ Готово', 'filter_completed')
+    ];
+
+    ctx.editMessageText(`📂 *ПОСЛЕДНИЕ ЗАЯВКИ*\n───────────────────\nНажмите на заявку для просмотра деталей:`, {
         parse_mode: 'Markdown',
-        ...Markup.inlineKeyboard(buttons)
+        ...Markup.inlineKeyboard([
+            filterButtons,
+            ...buttons,
+            [Markup.button.callback('🚨 Удалить ВСЕ заявки', 'delete_all_confirm')]
+        ])
     });
     ctx.answerCbQuery();
+});
+
+// Delete all requests handlers
+bot.action('delete_all_confirm', isAdmin, (ctx) => {
+    ctx.editMessageText(
+        '⚠️ *ВНИМАНИЕ! ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ*\n\n' +
+        'Вы уверены, что хотите безвозвратно удалить **ВСЕ** заявки из базы данных?\n\n' +
+        '🚨 *Это действие полностью сотрет историю и его нельзя будет отменить!*',
+        {
+            parse_mode: 'Markdown',
+            ...Markup.inlineKeyboard([
+                [
+                    Markup.button.callback('🗑 Да, удалить ВСЕ', 'delete_all_yes'),
+                    Markup.button.callback('❌ Нет, отмена', 'back_to_list')
+                ]
+            ])
+        }
+    );
+    ctx.answerCbQuery();
+});
+
+bot.action('delete_all_yes', isAdmin, (ctx) => {
+    saveData(MESSAGES_FILE, []);
+    ctx.answerCbQuery('🗑 Все заявки удалены');
+    ctx.editMessageText('📭 *Все заявки были безвозвратно удалены из базы данных.*', { parse_mode: 'Markdown' });
 });
 
 const formatMessage = (msg) => {
@@ -708,6 +769,74 @@ app.post('/api/contact', async (req, res) => {
     const { name, tel, email, message, source, projectType, capacity } = req.body;
     const lang = req.body.lang || req.body.lng || 'ru';
 
+    // 1. IP Rate Limiting & Lockdown
+    const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress;
+    const now = Date.now();
+
+    if (ipLockdowns.has(clientIp)) {
+        const expiry = ipLockdowns.get(clientIp);
+        if (now < expiry) {
+            const minutesLeft = Math.ceil((expiry - now) / (60 * 1000));
+            return res.status(429).json({
+                success: false,
+                error: lang === 'en'
+                    ? `Your IP is temporarily blocked for spamming. Please wait ${minutesLeft} min.`
+                    : lang === 'uz'
+                    ? `IP manzilingiz spam uchun vaqtincha bloklandi. Iltimos, ${minutesLeft} daqiqa kuting.`
+                    : `Ваш IP временно заблокирован за спам. Пожалуйста, подождите ${minutesLeft} мин.`
+            });
+        } else {
+            ipLockdowns.delete(clientIp);
+        }
+    }
+
+    let history = ipRequestHistory.get(clientIp) || [];
+    history = history.filter(time => now - time < 5 * 60 * 1000); // 5 min window
+    history.push(now);
+    ipRequestHistory.set(clientIp, history);
+
+    if (history.length > 3) {
+        const lockdownDuration = 60 * 60 * 1000; // 1 hour lockdown
+        ipLockdowns.set(clientIp, now + lockdownDuration);
+        ipRequestHistory.delete(clientIp);
+        return res.status(429).json({
+            success: false,
+            error: lang === 'en'
+                ? "Spam detected. Your IP has been locked for 1 hour."
+                : lang === 'uz'
+                ? "Spam aniqlandi. IP manzilingiz 1 soatga bloklandi."
+                : "Обнаружен спам. Ваш IP заблокирован на 1 час."
+        });
+    }
+
+    // 2. Phone Duplicate Prevention (within 10 minutes)
+    if (tel) {
+        const cleanTel = tel.replace(/\D/g, '');
+        if (cleanTel.length > 0) {
+            const messages = loadData(MESSAGES_FILE);
+            const duplicate = messages.find(msg => {
+                if (!msg.tel) return false;
+                const msgCleanTel = msg.tel.replace(/\D/g, '');
+                if (msgCleanTel !== cleanTel) return false;
+
+                const msgTime = msg.createdAt ? msg.createdAt : new Date(msg.date).getTime();
+                const msgTimestamp = isNaN(msgTime) ? (now - 15 * 60 * 1000) : msgTime;
+                return (now - msgTimestamp) < 10 * 60 * 1000; // 10 min window
+            });
+
+            if (duplicate) {
+                return res.status(400).json({
+                    success: false,
+                    error: lang === 'en'
+                        ? "A request with this number was recently submitted. Please wait 10 minutes."
+                        : lang === 'uz'
+                        ? "Ushbu raqamdan yaqinda murojaat yuborilgan. Iltimos, 10 daqiqa kuting."
+                        : "Заявка с таким номером уже отправлена недавно. Пожалуйста, подождите 10 минут."
+                });
+            }
+        }
+    }
+
     const newMsg = {
         id: Date.now().toString(),
         name: name || 'Anonymous',
@@ -718,7 +847,8 @@ app.post('/api/contact', async (req, res) => {
         message: message || '',
         source: source || '/',
         status: 'new',
-        date: new Date().toLocaleString()
+        date: new Date().toLocaleString(),
+        createdAt: now
     };
 
     const messages = loadData(MESSAGES_FILE);
