@@ -11,12 +11,14 @@ const archiver = require('archiver');
 const si = require('systeminformation');
 
 const app = express();
+app.disable('x-powered-by');
 app.set('trust proxy', true);
 const port = process.env.PORT || 5001;
 
-// Anti-spam in-memory storage
+// Anti-spam & rate limit in-memory storage
 const ipLockdowns = new Map(); // ip -> expiryTimestamp
 const ipRequestHistory = new Map(); // ip -> array of timestamps
+const visitRequestHistory = new Map(); // ip -> array of timestamps
 
 // Database (Simple JSON file)
 const MESSAGES_FILE = path.join(__dirname, 'messages.json');
@@ -70,7 +72,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '10kb' }));
 
 // Visit Logging
 const logVisit = (page) => {
@@ -89,6 +91,18 @@ const logVisit = (page) => {
 };
 
 app.post('/api/visit', (req, res) => {
+    const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress;
+    const now = Date.now();
+    let history = visitRequestHistory.get(clientIp) || [];
+    history = history.filter(time => now - time < 60 * 1000); // 1 min window
+    
+    if (history.length >= 10) {
+        return res.status(429).send('Too Many Requests');
+    }
+    
+    history.push(now);
+    visitRequestHistory.set(clientIp, history);
+
     const { page } = req.body;
     logVisit(page || '/');
     res.status(200).send('OK');
