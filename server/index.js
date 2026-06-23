@@ -780,8 +780,13 @@ app.post('/api/contact', async (req, res) => {
         return res.status(400).json({ success: false, error: "Empty request body" });
     }
 
-    const { name, tel, email, message, source, projectType, capacity } = req.body;
+    const { name, tel, email, message, source, projectType, capacity, website } = req.body;
     const lang = req.body.lang || req.body.lng || 'ru';
+
+    // 0. Honeypot check (silently drop bot spam)
+    if (website) {
+        return res.status(200).json({ success: true });
+    }
 
     // 1. IP Rate Limiting & Lockdown
     const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress;

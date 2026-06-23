@@ -11,8 +11,16 @@ const ContactForm = () => {
         email: "",
         projectType: "",
         capacity: "",
-        message: ""
+        message: "",
+        website: "" // Honeypot field
     });
+    const [interactionStarted, setInteractionStarted] = useState(0);
+
+    const handleStartInteraction = () => {
+        if (!interactionStarted) {
+            setInteractionStarted(Date.now());
+        }
+    };
     const [toast, setToast] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -33,6 +41,21 @@ const ContactForm = () => {
     const onSubmit = async (e) => {
         e.preventDefault();
 
+        // 1. Honeypot check: if filled, silently discard (pretend success)
+        if (formData.website) {
+            showToast(t("toastSuccess"), "success");
+            setFormData({ name: "", tel: "", email: "", projectType: "", capacity: "", message: "", website: "" });
+            return;
+        }
+
+        // 2. Submission speed check: must take at least 2 seconds since interaction started
+        const timeElapsed = interactionStarted ? (Date.now() - interactionStarted) : 0;
+        if (!interactionStarted || timeElapsed < 2000) {
+            showToast(t("toastSuccess"), "success");
+            setFormData({ name: "", tel: "", email: "", projectType: "", capacity: "", message: "", website: "" });
+            return;
+        }
+
         setLoading(true);
         try {
             const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5001";
@@ -50,7 +73,7 @@ const ContactForm = () => {
 
             if (response.ok) {
                 showToast(t("toastSuccess"), "success");
-                setFormData({ name: "", tel: "", email: "", projectType: "", capacity: "", message: "" });
+                setFormData({ name: "", tel: "", email: "", projectType: "", capacity: "", message: "", website: "" });
             } else {
                 try {
                     const data = await response.json();
@@ -90,7 +113,19 @@ const ContactForm = () => {
                     </ul>
                 </div>
 
-                <form onSubmit={onSubmit}>
+                <form onSubmit={onSubmit} onFocus={handleStartInteraction} onKeyDown={handleStartInteraction}>
+                    {/* Honeypot field (hidden from users, targeted by bots) */}
+                    <div style={{ position: "absolute", left: "-9999px", top: "-9999px" }} aria-hidden="true">
+                        <input
+                            type="text"
+                            name="website"
+                            tabIndex="-1"
+                            value={formData.website}
+                            onChange={handleChange}
+                            autoComplete="off"
+                        />
+                    </div>
+
                     <div className="form-row">
                         <input
                             type="text"
